@@ -83,32 +83,6 @@ export default function App() {
       {/* Absolute Dynamic Grid Matrix Pattern Overlays */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#51453210_1px,transparent_1px),linear-gradient(to_bottom,#51453210_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
 
-      {/* Hamburger Menu Button (Mobile ONLY) */}
-      <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        aria-expanded={isMobileMenuOpen}
-        aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-        className="mobile-menu-focusable fixed top-3 left-4 sm:top-4 sm:left-8 z-50 md:hidden flex items-center justify-center w-11 h-11 rounded-full bg-[#130d05]/80 backdrop-blur-md border border-[#ffba20]/25 shadow-[0_0_12px_rgba(255,186,32,0.15)] focus:outline-none focus:ring-2 focus:ring-[#ffba20] active:scale-95 transition-all text-[#ede1d0] cursor-pointer"
-      >
-        <div className="w-5 h-[14px] flex flex-col justify-between relative">
-          <span
-            className={`h-[2px] bg-[#ede1d0] rounded-full transition-all duration-300 ${
-              isMobileMenuOpen ? "rotate-45 translate-y-[6px] bg-[#ffba20]" : "w-full"
-            }`}
-          />
-          <span
-            className={`h-[2px] bg-[#ede1d0] rounded-full transition-all duration-300 ${
-              isMobileMenuOpen ? "opacity-0 w-0" : "w-4/5"
-            }`}
-          />
-          <span
-            className={`h-[2px] bg-[#ede1d0] rounded-full transition-all duration-300 ${
-              isMobileMenuOpen ? "-rotate-45 -translate-y-[6px] bg-[#ffba20]" : "w-full"
-            }`}
-          />
-        </div>
-      </button>
-
       {/* Mobile Navigation Panel Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -161,20 +135,66 @@ export default function App() {
       </AnimatePresence>
 
       {/* Global Navbar Header */}
-      <nav className="fixed top-0 left-0 right-0 z-30 bg-[#181309]/80 backdrop-blur-md border-b border-[#514532]/10 px-4 sm:px-8 lg:px-12 py-4 sm:py-5">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#181309]/85 backdrop-blur-md border-b border-[#514532]/10 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
-          {/* Logo Brand Title */}
-          <button
-            onClick={() => setActiveTab("Home")}
-            className="flex items-center cursor-pointer group pl-14 md:pl-0"
-          >
-            <span className="font-display font-bold uppercase tracking-[0.1em] text-xl sm:text-2xl text-[#ede1d0] group-hover:text-white transition-colors">
-              Jhay Mark A.
-            </span>
-          </button>
+          {/* Logo Brand Group with Interactive Mobile Monogram Trigger */}
+          <div className="flex items-center gap-2.5 sm:gap-4">
+            {/* JM Monogram Logo as Interactive Mobile Navigation Control */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-expanded={isMobileMenuOpen}
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              className={`mobile-menu-focusable md:hidden relative w-9.5 h-9.5 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/95 border transition-all overflow-hidden cursor-pointer ${
+                isMobileMenuOpen
+                  ? "border-[#ffba20] scale-105 shadow-[0_0_16px_rgba(255,186,32,0.35)] animate-pulse"
+                  : "border-[#ffba20]/25 hover:border-[#ffba20]/60 active:scale-95 shadow-[0_0_10px_rgba(255,186,32,0.12)]"
+              }`}
+            >
+              <img
+                src="/logo.svg"
+                alt="JM Monogram"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </button>
 
-          {/* Navigation links */}
+            {/* Desktop Brand Logo & Title Group (Visible ONLY on md and above) */}
+            <button
+              onClick={() => {
+                setActiveTab("Home");
+                setIsMobileMenuOpen(false);
+              }}
+              className="hidden md:flex items-center gap-3 cursor-pointer group text-left"
+            >
+              <div className="relative w-9 h-9 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/90 border border-[#ffba20]/25 group-hover:border-[#ffba20]/60 transition-all overflow-hidden shadow-[0_0_12px_rgba(255,186,32,0.12)]">
+                <img
+                  src="/logo.svg"
+                  alt="JM Logo"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <span className="font-display font-bold uppercase tracking-[0.1em] text-xl text-[#ede1d0] group-hover:text-white transition-colors leading-none">
+                Jhay Mark A.
+              </span>
+            </button>
+
+            {/* Mobile Brand Title */}
+            <button
+              onClick={() => {
+                setActiveTab("Home");
+                setIsMobileMenuOpen(false);
+              }}
+              className="md:hidden flex items-center cursor-pointer group text-left"
+            >
+              <span className="font-display font-bold uppercase tracking-[0.06em] sm:tracking-[0.08em] text-[13.5px] xs:text-sm sm:text-lg text-[#ede1d0] group-hover:text-white transition-colors leading-none whitespace-nowrap">
+                Jhay Mark A.
+              </span>
+            </button>
+          </div>
+
+          {/* Navigation links (Desktop only) */}
           <div className="hidden md:flex items-center gap-2">
             {["Home", "Story", "Work", "Contact"].map((tab) => (
               <button
@@ -202,8 +222,11 @@ export default function App() {
           {/* Action button */}
           <div className="flex items-center gap-2 sm:gap-4">
             <button
-              onClick={() => setActiveTab("Contact")}
-              className="px-3 py-2 sm:px-6 sm:py-2.5 bg-[#ffba20] text-[#181309] font-display text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-bold hover:bg-[#ffdca1] transition-colors rounded cursor-pointer"
+              onClick={() => {
+                setActiveTab("Contact");
+                setIsMobileMenuOpen(false);
+              }}
+              className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2.5 bg-[#ffba20] text-[#181309] font-display text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-bold hover:bg-[#ffdca1] transition-colors rounded cursor-pointer shrink-0"
             >
               Get In Touch
             </button>
