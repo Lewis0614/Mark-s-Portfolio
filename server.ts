@@ -11,15 +11,28 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Initialize server-side Gemini API client
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      "User-Agent": "aistudio-build",
-    },
-  },
-});
+// Helper for lazy initialization of server-side Gemini API client
+let aiClient: GoogleGenAI | null = null;
+
+function getGeminiClient(): GoogleGenAI {
+  if (!aiClient) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error(
+        "GEMINI_API_KEY is not defined. Please ensure you have added GEMINI_API_KEY to your environment variables on Vercel or in your .env file."
+      );
+    }
+    aiClient = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          "User-Agent": "aistudio-build",
+        },
+      },
+    });
+  }
+  return aiClient;
+}
 
 // Grounding prompt with Jhay Mark's detailed portfolio details to enable accurate conversation
 const SYSTEM_INSTRUCTION = `
@@ -92,6 +105,7 @@ app.post("/api/chat", async (req, res) => {
       parts: [{ text: message }],
     });
 
+    const ai = getGeminiClient();
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: contents,
