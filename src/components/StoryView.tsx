@@ -36,7 +36,7 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
           {/* Portrait Photo on Left */}
           <div className="col-span-12 lg:col-span-5 relative group z-10">
             <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl pointer-events-none" />
-            <div className="relative rounded-2xl border border-[#514532]/25 aspect-[4/5] max-w-md mx-auto bg-[#130d05] shadow-2xl">
+            <div className="relative rounded-2xl border border-[#514532]/25 group-hover:border-[#ffba20]/50 group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)] transition-all duration-500 aspect-[4/5] max-w-md mx-auto bg-[#130d05] shadow-2xl">
               <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10 rounded-2xl" />
               <img
                 src={profileImgSrc}
@@ -47,7 +47,7 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                     setProfileImgSrc("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600");
                   }
                 }}
-                className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-750 ease-out rounded-2xl"
+                className="w-full h-full object-cover transition-all duration-500 ease-out rounded-2xl"
               />
               
               {/* "System Dev" Caption Overlay Badge */}
