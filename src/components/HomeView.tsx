@@ -1,0 +1,177 @@
+import { motion } from "motion/react";
+import { PROFILE, SPECIALIZATIONS } from "../data";
+import Footer from "./Footer";
+import { downloadResume } from "../utils/downloadResume";
+
+interface HomeViewProps {
+  onNavigate: (tab: string) => void;
+}
+
+export default function HomeView({ onNavigate }: HomeViewProps) {
+  return (
+    <div className="space-y-16 sm:space-y-24 md:space-y-32">
+      
+      {/* Hero Section */}
+      <section className="relative min-h-[55vh] sm:min-h-[60vh] lg:min-h-[65vh] flex flex-col justify-center pt-0 sm:pt-4 lg:pt-6 pb-8 sm:pb-12 overflow-hidden">
+        {/* Background Atmospheric Lighting */}
+        <div className="absolute inset-0 z-0 bg-[#181309]/50">
+          <div
+            className="absolute top-1/4 left-1/3 w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255, 184, 0, 0.08) 0%, rgba(255, 184, 0, 0) 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+        </div>
+
+        {/* Content Canvas */}
+        <div className="relative z-10 w-full px-4 sm:px-8 lg:px-12 flex flex-col items-start max-w-7xl mx-auto flex-1 justify-center py-3 sm:py-6">
+          <div className="grid grid-cols-12 w-full gap-8 items-center">
+            {/* Vertical Editorial Metadata */}
+            <div className="hidden lg:block col-span-1 border-r border-[#514532]/20 pr-6 h-48 flex items-center justify-center">
+              <div className="flex flex-col gap-12 transform rotate-180 [writing-mode:vertical-lr] items-center text-[#d5c4ab]/30 select-none">
+                <span className="font-mono text-[10px] uppercase tracking-[0.5em] font-medium">CREATIVE ENGINEERING</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.5em] font-medium">PORTFOLIO MMXXIV</span>
+              </div>
+            </div>
+
+            {/* Display Hero Title and descriptions */}
+            <div className="col-span-12 lg:col-span-11 pl-0 lg:pl-6 w-full">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="space-y-4 sm:space-y-6 mb-8 sm:mb-10"
+              >
+                <div>
+                  <span className="inline-block font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[#ffba20] bg-[#271f11]/60 px-3 py-1.5 sm:px-4 sm:py-2 border border-[#ffba20]/20 rounded font-bold">
+                    FUTURE-FORWARD DEVELOPMENT
+                  </span>
+                </div>
+                <h1 className="font-display text-4xl sm:text-7xl md:text-8xl lg:text-[7.5rem] text-[#ede1d0] font-black leading-[0.98] sm:leading-[0.9] tracking-tighter max-w-6xl">
+                  <span className="text-[#f1e5d1] tracking-tight drop-shadow-[0_0_25px_rgba(255,186,32,0.15)] block">JHAY MARK</span>
+                  <span className="text-[#ede1d0] font-bold block">ORTIZ LUIS</span>
+                </h1>
+              </motion.div>
+
+              {/* Grid Column Layout under name */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 mb-10 sm:mb-12 border-t border-[#514532]/15 pt-6 sm:pt-8"
+              >
+                <div className="md:col-span-6 border-l-2 border-[#ffba20] pl-4 sm:pl-6 py-1">
+                  <h2 className="font-display text-lg sm:text-2xl text-[#ede1d0]/90 leading-snug font-bold">
+                    Computer Engineering Student <br />
+                    <span className="text-[#ffba20] sm:text-[#ede1d0]/90">System Developer | AI Conversation</span> <br className="hidden sm:inline" />
+                    <span className="text-[#ffba20] sm:text-[#ede1d0]/90">Specialist</span>
+                  </h2>
+                </div>
+                <div className="md:col-span-6 flex items-center">
+                  <p className="font-sans text-xs sm:text-base text-[#d5c4ab]/85 leading-relaxed max-w-xl">
+                    Building intelligent systems, optimizing AI conversations, and developing digital experiences that combine technology, functionality, and creativity.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Action Buttons with high-fidelity badges */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 items-stretch sm:items-center w-full"
+              >
+                <button
+                  onClick={() => onNavigate("Work")}
+                  className="group relative overflow-hidden bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] px-8 py-3.5 sm:px-10 sm:py-4 rounded transition-all active:scale-95 duration-300 font-display text-xs uppercase tracking-widest font-black flex items-center justify-center gap-3 cursor-pointer"
+                >
+                  <span className="relative z-10">View Projects</span>
+                  <span className="material-symbols-outlined relative z-10 transition-transform group-hover:translate-x-1 text-sm font-black">
+                    arrow_forward
+                  </span>
+                </button>
+                <a
+                  href="/Jhay_Mark_Ortiz_Luis_Resume.pdf"
+                  download="Jhay_Mark_Ortiz_Luis_Resume.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={downloadResume}
+                  className="group px-6 py-3.5 sm:px-8 sm:py-4 border border-[#514532]/70 hover:border-[#ffba20] text-[#ede1d0] rounded font-display text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 transition-colors backdrop-blur-sm hover:bg-[#3b3428]/35 font-bold cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[18px]">download</span>
+                  <span>Download Resume</span>
+                </a>
+                
+                {/* Available status badge */}
+                <div className="flex items-center justify-center sm:justify-start gap-2 px-2 py-1.5 font-mono text-[10px] tracking-wider uppercase font-semibold text-[#d5c4ab]/70">
+                  <span className="inline-block w-2.1 h-2.1 sm:w-2.5 sm:h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.7)]" />
+                  <span>Available for challenges</span>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll down indicator */}
+        <div className="relative z-10 text-center pb-4 select-none pointer-events-none hidden md:block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#d5c4ab]/40 block mb-1">
+            SCROLL
+          </span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-[#ffba20]/50 to-transparent mx-auto" />
+        </div>
+      </section>
+
+      {/* Bento Grid layout (Specializations / The Approach) */}
+      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-12">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 pb-6 border-b border-[#514532]/10">
+          <div>
+            <h3 className="font-mono text-xs text-[#ffba20] uppercase tracking-widest mb-2">
+              The Approach
+            </h3>
+            <h4 className="font-display text-3xl sm:text-5xl font-black text-[#ede1d0] leading-tight sm:leading-none tracking-tight">
+              Intersection of logic <br className="hidden sm:inline" /> and aesthetic vision.
+            </h4>
+          </div>
+          <span className="font-mono text-[11px] text-[#d5c4ab]/40 uppercase tracking-widest font-bold">01 // CORE COMPETENCIES</span>
+        </div>
+
+        {/* Three highly stylized bento-like panels matching column 1 layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {SPECIALIZATIONS.map((spec) => (
+            <div
+              key={spec.id}
+              className="group relative bg-[#130d05] border border-[#514532]/20 hover:border-[#ffba20]/30 transition-all duration-500 rounded-lg overflow-hidden p-6 sm:p-10 flex flex-col justify-between min-h-[300px] sm:min-h-[360px] cinematic-glow"
+            >
+              {/* Giant faint counter number */}
+              <div className="font-display text-5xl sm:text-6xl text-[#514532]/15 font-black select-none text-right transition-colors duration-500 group-hover:text-[#ffba20]/5 leading-none">
+                {spec.num}
+              </div>
+              
+              <div className="relative z-10 space-y-4">
+                <span className="material-symbols-outlined text-[#ffba20] text-[36px] sm:text-[44px] mb-1 sm:mb-2 block drop-shadow-[0_0_12px_rgba(255,186,32,0.25)]">
+                  {spec.icon}
+                </span>
+                <h5 className="font-display text-lg sm:text-xl font-bold uppercase tracking-wider text-[#ede1d0]">
+                  {spec.title}
+                </h5>
+                <p className="font-sans text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
+                  {spec.description}
+                </p>
+              </div>
+
+              {/* Bottom decorative bar */}
+              <div className="h-[2px] w-12 bg-gradient-to-r from-[#ffba20] to-transparent group-hover:w-full transition-all duration-700" />
+              
+              {/* Deep twilight glow overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#ffba20]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Localized Footer Instance */}
+      <Footer onNavigate={onNavigate} />
+    </div>
+  );
+}
