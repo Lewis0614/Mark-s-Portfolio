@@ -15,6 +15,11 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
+  // Smoothly scroll to the top of the viewport whenever the active tab changes (e.g. when selecting contact/navigation buttons)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add("overflow-hidden");

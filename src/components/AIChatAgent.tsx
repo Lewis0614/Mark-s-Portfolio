@@ -34,7 +34,7 @@ export default function AIChatAgent() {
   const [inputVal, setInputVal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [usedPrompts, setUsedPrompts] = useState<number>(0);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   // Sync remaining quota from browser HttpOnly cookie session status on mount
   useEffect(() => {
@@ -75,9 +75,14 @@ I look forward to connecting with you.
     fetchQuotaStatus();
   }, []);
 
-  // Auto scroll to bottom of chat
+  // Auto scroll inside the messages container only, avoiding window-disturbing scrollIntoView
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, isLoading]);
 
   const handleSend = async (textToSend: string) => {
@@ -202,7 +207,7 @@ I look forward to connecting with you.
       </div>
 
       {/* Scrollable messages box */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar">
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -238,7 +243,6 @@ I look forward to connecting with you.
             </div>
           </div>
         )}
-        <div ref={chatEndRef} />
       </div>
 
       {/* Suggestion Prompts Section */}
