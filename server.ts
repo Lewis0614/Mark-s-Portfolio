@@ -77,29 +77,20 @@ Response Style Guidelines:
 - Invite users to email Jhay Mark at jhaymarkortizluis@gmail.com or call 0939-830-9890.
 `;
 
-app.get("/api/test", (req, res) => {
-  res.json({
-    success: true,
-    vercel: !!process.env.VERCEL,
-    apiKeyPresent: !!process.env.GEMINI_API_KEY
-  });
-});
-
-// API endpoint for chatbot query
 // API endpoint for chatbot query
 app.post("/api/chat", async (req, res) => {
   try {
     const { message, history } = req.body;
-
     if (!message) {
-      return res.status(400).json({
-        error: "Message is required.",
-      });
+      return res.status(400).json({ error: "Message is required." });
     }
 
+    // Prepare contents containing system instruction and conversation context
+    // We can use standard generateContent with a structured chat-like context or standard chat API.
+    // Let's use ai.models.generateContent to have absolute control over formatting and custom inputs
     const contents: any[] = [];
 
-    if (history && Array.isArray(history)) {
+    if (history && history.length > 0) {
       history.forEach((h: any) => {
         contents.push({
           role: h.role,
@@ -113,36 +104,20 @@ app.post("/api/chat", async (req, res) => {
       parts: [{ text: message }],
     });
 
-    console.log("===== DIGITAL TWIN REQUEST =====");
-    console.log("API Key Present:", !!process.env.GEMINI_API_KEY);
-    console.log("Model:", "gemini-2.5-flash");
-    console.log("Message:", message);
-
     const ai = getGeminiClient();
-
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents,
+      model: "gemini-3.5-flash",
+      contents: contents,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         temperature: 0.7,
       },
     });
 
-    console.log("===== GEMINI RESPONSE SUCCESS =====");
-
-    return res.json({
-      text: response.text,
-    });
-
+    res.json({ text: response.text });
   } catch (error: any) {
-    console.error("===== GEMINI API ERROR =====");
-    console.error(error);
-
-    return res.status(500).json({
-      error: error?.message || "An error occurred with Gemini.",
-      stack: error?.stack,
-    });
+    console.error("Gemini API Error:", error);
+    res.status(500).json({ error: error.message || "An error occurred with Gemini." });
   }
 });
 
