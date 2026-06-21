@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Menu, X } from "lucide-react";
 import { PROFILE } from "./data";
 import HomeView from "./components/HomeView";
 import WorkView from "./components/WorkView";
@@ -141,101 +142,134 @@ export default function App() {
 
       {/* Global Navbar Header */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#181309]/85 backdrop-blur-md border-b border-[#514532]/10 px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4 transition-all">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto">
           
-          {/* Logo Brand Group with Interactive Mobile Monogram Trigger */}
-          <div className="flex items-center gap-2.5 sm:gap-4">
-            {/* JM Monogram Logo as Interactive Mobile Navigation Control */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-expanded={isMobileMenuOpen}
-              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              className={`mobile-menu-focusable md:hidden relative w-9.5 h-9.5 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/95 border transition-all overflow-hidden cursor-pointer ${
-                isMobileMenuOpen
-                  ? "border-[#ffba20] scale-105 shadow-[0_0_16px_rgba(255,186,32,0.35)] animate-pulse"
-                  : "border-[#ffba20]/25 hover:border-[#ffba20]/60 active:scale-95 shadow-[0_0_10px_rgba(255,186,32,0.12)]"
-              }`}
-            >
-              <img
-                src="/logo.svg"
-                alt="JM Monogram"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </button>
-
-            {/* Desktop Brand Logo & Title Group (Visible ONLY on md and above) */}
-            <button
-              onClick={() => {
-                setActiveTab("Home");
-                setIsMobileMenuOpen(false);
-              }}
-              className="hidden md:flex items-center gap-3 cursor-pointer group text-left"
-            >
-              <div className="relative w-9 h-9 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/90 border border-[#ffba20]/25 group-hover:border-[#ffba20]/60 transition-all overflow-hidden shadow-[0_0_12px_rgba(255,186,32,0.12)]">
-                <img
-                  src="/logo.svg"
-                  alt="JM Logo"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <span className="font-display font-bold uppercase tracking-[0.1em] text-xl text-[#ede1d0] group-hover:text-white transition-colors leading-none">
-                Jhay Mark A.
-              </span>
-            </button>
-
-            {/* Mobile Brand Title */}
-            <button
-              onClick={() => {
-                setActiveTab("Home");
-                setIsMobileMenuOpen(false);
-              }}
-              className="md:hidden flex items-center cursor-pointer group text-left"
-            >
-              <span className="font-display font-bold uppercase tracking-[0.06em] sm:tracking-[0.08em] text-[13.5px] xs:text-sm sm:text-lg text-[#ede1d0] group-hover:text-white transition-colors leading-none whitespace-nowrap">
-                Jhay Mark A.
-              </span>
-            </button>
-          </div>
-
-          {/* Navigation links (Desktop only) */}
-          <div className="hidden md:flex items-center gap-2">
-            {["Home", "Story", "Work", "Contact"].map((tab) => (
+          {/* Mobile Header Layout (Visible ONLY on mobile screens < 768px) */}
+          <div className="flex md:hidden w-full items-center justify-between gap-2">
+            {/* Left Portion: Hamburger + Brand Group */}
+            <div className="flex items-center gap-2 xs:gap-3">
+              {/* Elegant Circular Hamburger Button */}
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 text-xs font-display uppercase tracking-widest font-semibold transition-all relative cursor-pointer ${
-                  activeTab === tab
-                    ? "text-[#ede1d0]"
-                    : "text-[#d5c4ab]/60 hover:text-white"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-expanded={isMobileMenuOpen}
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                className={`mobile-menu-focusable flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#140e06]/95 border transition-all duration-300 relative ${
+                  isMobileMenuOpen
+                    ? "border-[#ffba20] scale-105 shadow-[0_0_12px_rgba(255,186,32,0.4)]"
+                    : "border-[#ffba20]/25 hover:border-[#ffba20]/60 active:scale-95 shadow-[0_0_6px_rgba(255,186,32,0.1)]"
                 }`}
               >
-                {/* Underline indicator exactly like the screenshot */}
-                {activeTab === tab && (
-                  <motion.div
-                    layoutId="activeTabUnderline"
-                    className="absolute bottom-0 left-4 right-4 h-[2px] bg-[#ffba20]"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
+                {isMobileMenuOpen ? (
+                  <X className="w-4 h-4 text-[#ffdca1]" />
+                ) : (
+                  <Menu className="w-4 h-4 text-[#ffdca1]" />
                 )}
-                {tab}
               </button>
-            ))}
+
+              {/* JM Group: Monogram Logo + Name */}
+              <button
+                onClick={() => {
+                  setActiveTab("Home");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-1.5 xs:gap-2 text-left cursor-pointer active:scale-98 transition-all"
+              >
+                {/* JM Monogram Logo container */}
+                <div className="relative w-7 h-7 xs:w-8 xs:h-8 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/90 border border-[#ffba20]/20 overflow-hidden shadow-[0_0_8px_rgba(255,186,32,0.15)]">
+                  <img
+                    src="/logo.svg"
+                    alt="JM Monogram"
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                {/* Jhay Mark A. Name Text with perfect scaling and no wrapping text clipping */}
+                <span className="font-display font-bold uppercase tracking-wider text-[11px] xs:text-xs sm:text-[14px] text-[#ede1d0] leading-none whitespace-nowrap">
+                  Jhay Mark A.
+                </span>
+              </button>
+            </div>
+
+            {/* Right Portion: Action / CTA Button */}
+            <div className="flex items-center shrink-0">
+              <button
+                onClick={() => {
+                  setActiveTab("Contact");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="px-3.5 py-2 bg-[#ffba20] text-[#181309] font-display text-[9.5px] xs:text-[11px] uppercase tracking-wider font-bold hover:bg-[#ffdca1] active:scale-95 transition-all rounded shadow-[0_0_10px_rgba(255,186,32,0.15)] shrink-0"
+              >
+                Get In Touch
+              </button>
+            </div>
           </div>
 
-          {/* Action button */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            <button
-              onClick={() => {
-                setActiveTab("Contact");
-                setIsMobileMenuOpen(false);
-              }}
-              className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2.5 bg-[#ffba20] text-[#181309] font-display text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-bold hover:bg-[#ffdca1] transition-colors rounded cursor-pointer shrink-0"
-            >
-              Get In Touch
-            </button>
+          {/* Desktop Header Layout (Visible ONLY on tablet and desktop screens >= 768px) */}
+          <div className="hidden md:flex items-center justify-between w-full">
+            
+            {/* Logo Brand Group */}
+            <div className="flex items-center gap-4">
+              {/* Desktop Brand Logo & Title Group */}
+              <button
+                onClick={() => {
+                  setActiveTab("Home");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-3 cursor-pointer group text-left"
+              >
+                <div className="relative w-9 h-9 shrink-0 flex items-center justify-center rounded-lg bg-[#140e06]/90 border border-[#ffba20]/25 group-hover:border-[#ffba20]/60 transition-all overflow-hidden shadow-[0_0_12px_rgba(255,186,32,0.12)]">
+                  <img
+                    src="/logo.svg"
+                    alt="JM Logo"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <span className="font-display font-bold uppercase tracking-[0.1em] text-xl text-[#ede1d0] group-hover:text-white transition-colors leading-none">
+                  Jhay Mark A.
+                </span>
+              </button>
+            </div>
+
+            {/* Navigation links (Desktop only) */}
+            <div className="flex items-center gap-2">
+              {["Home", "Story", "Work", "Contact"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2 text-xs font-display uppercase tracking-widest font-semibold transition-all relative cursor-pointer ${
+                    activeTab === tab
+                      ? "text-[#ede1d0]"
+                      : "text-[#d5c4ab]/60 hover:text-white"
+                  }`}
+                >
+                  {/* Underline indicator exactly like the screenshot */}
+                  {activeTab === tab && (
+                    <motion.div
+                      layoutId="activeTabUnderline"
+                      className="absolute bottom-0 left-4 right-4 h-[2px] bg-[#ffba20]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            {/* Action button (Desktop only) */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => {
+                  setActiveTab("Contact");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="px-4 py-2 md:px-6 md:py-2.5 bg-[#ffba20] text-[#181309] font-display text-xs uppercase tracking-widest font-bold hover:bg-[#ffdca1] transition-colors rounded cursor-pointer shrink-0"
+              >
+                Get In Touch
+              </button>
+            </div>
           </div>
+
         </div>
       </nav>
 

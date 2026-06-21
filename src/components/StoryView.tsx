@@ -27,16 +27,16 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
   const [profileImgSrc, setProfileImgSrc] = useState<string>(PROFILE.profileImage);
 
   return (
-    <div className="space-y-16 sm:space-y-24 md:space-y-32">
+    <div className="space-y-10 sm:space-y-24 md:space-y-32">
       
       {/* 1. Header & PUP Journey Section (Column 2) */}
-      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-8 sm:pt-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto pt-4 sm:pt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-start">
           
           {/* Portrait Photo on Left */}
           <div className="col-span-12 lg:col-span-5 relative group z-10">
             <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl pointer-events-none" />
-            <div className="relative rounded-2xl border border-[#514532]/25 group-hover:border-[#ffba20]/50 group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)] transition-all duration-500 aspect-[4/5] max-w-md mx-auto bg-[#130d05] shadow-2xl">
+            <div className="relative rounded-2xl border border-[#514532]/25 group-hover:border-[#ffba20]/50 group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)] transition-all duration-500 aspect-[4/5] max-w-[270px] xs:max-w-[310px] sm:max-w-md mx-auto bg-[#130d05] shadow-2xl">
               <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10 rounded-2xl" />
               <img
                 src={profileImgSrc}
@@ -51,11 +51,11 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
               />
               
               {/* "System Dev" Caption Overlay Badge */}
-              <div className="absolute bottom-2 right-2 sm:-bottom-4 sm:-right-4 bg-[#1a140c] border border-[#ffba20]/30 rounded-xl px-4 py-3 sm:px-6 sm:py-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)] z-20 min-w-[160px] sm:min-w-[200px]">
-                <span className="font-mono text-[8px] sm:text-[9px] text-[#ffba20]/75 uppercase tracking-[0.25em] font-bold block mb-1">
+              <div className="absolute bottom-1.5 right-1.5 sm:-bottom-4 sm:-right-4 bg-[#1a140c] border border-[#ffba20]/30 rounded-lg sm:rounded-xl px-3 py-2 sm:px-6 sm:py-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)] z-20 min-w-[125px] sm:min-w-[200px]">
+                <span className="font-mono text-[7px] sm:text-[9px] text-[#ffba20]/75 uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold block mb-0.5 sm:mb-1">
                   CURRENT // FOCUS
                 </span>
-                <span className="font-display text-xl sm:text-3xl font-black text-[#ede1d0] tracking-tight block leading-none">
+                <span className="font-display text-base sm:text-3xl font-black text-[#ede1d0] tracking-tight block leading-none">
                   System Dev
                 </span>
               </div>
@@ -63,21 +63,21 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
           </div>
 
           {/* Educational description on Right */}
-          <div className="col-span-12 lg:col-span-7 space-y-6 lg:space-y-8 lg:pl-6">
-            <div className="flex items-center gap-3">
-              <span className="w-10 h-[1.5px] bg-[#d5c4ab]/40 shrink-0" />
-              <span className="font-mono text-[10px] sm:text-xs text-[#d5c4ab]/70 uppercase tracking-[0.25em] font-bold">
+          <div className="col-span-12 lg:col-span-7 space-y-4 sm:space-y-8 lg:pl-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="w-6 sm:w-10 h-[1.5px] bg-[#d5c4ab]/40 shrink-0" />
+              <span className="font-mono text-[8px] sm:text-xs text-[#d5c4ab]/70 uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold">
                 CHAPTER 01: THE ORIGIN
               </span>
             </div>
             
-            <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#f1e5d1] tracking-tight leading-[1.05] sm:leading-[0.98] uppercase">
+            <h2 className="font-display text-[1.8rem] xs:text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#f1e5d1] tracking-tight leading-[1.02] sm:leading-[0.98] uppercase">
               Architecting <br className="hidden sm:inline" /> 
               the Future <br className="hidden sm:inline" /> 
               at PUP
             </h2>
 
-            <div className="font-sans text-sm sm:text-base text-[#d5c4ab]/85 space-y-6 leading-relaxed max-w-2xl">
+            <div className="font-sans text-xs xs:text-[13px] sm:text-base text-[#d5c4ab]/85 space-y-3.5 sm:space-y-6 leading-relaxed max-w-2xl">
               <p>
                 As a Computer Engineering student at the <strong className="text-[#f1e5d1] font-bold">Polytechnic University of the Philippines</strong>, my journey is defined by a relentless pursuit of technical mastery and innovative leadership.
               </p>
@@ -89,11 +89,11 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
               </p>
             </div>
             
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-wrap gap-2 sm:gap-4 pt-1 sm:pt-4">
               {["VISIONARY", "ENGINEER", "STRATEGIST"].map((tag) => (
                 <span
                   key={tag}
-                  className="px-6 py-2.5 bg-[#181309]/30 border border-[#514532]/30 text-[#d5c4ab]/65 font-mono text-[10px] uppercase tracking-[0.25em] font-bold rounded-full hover:border-[#ffba20]/50 duration-300 transition-colors"
+                  className="px-4 py-1.5 sm:px-6 sm:py-2.5 bg-[#181309]/30 border border-[#514532]/30 text-[#d5c4ab]/65 font-mono text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold rounded-full hover:border-[#ffba20]/50 duration-300 transition-colors pointer-events-none"
                 >
                   {tag}
                 </span>
@@ -309,10 +309,10 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
       </section>
 
       {/* 5. "PUP FAO Dance Crew / Leadership" Section (Column 4) */}
-      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-12 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
+      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-6 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-12 lg:gap-16 items-center">
         {/* Pictures Block on Left - Ordered last on mobile, first on desktop */}
         <div className="col-span-12 lg:col-span-5 relative group z-10 order-2 lg:order-1">
-          <div className="relative rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden border border-[#514532]/25 aspect-[4/5] max-w-sm sm:max-w-md mx-auto bg-[#130d05] shadow-2xl">
+          <div className="relative rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden border border-[#514532]/25 aspect-[4/5] max-w-[270px] xs:max-w-[310px] sm:max-w-md mx-auto bg-[#130d05] shadow-2xl">
             <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10 rounded-[1.5rem] lg:rounded-[2rem]" />
             <img
               src={PROFILE.danceImage}
@@ -323,25 +323,25 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             {/* Absolute overlay elements mimicking screenshots */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0a05]/95 via-[#0e0a05]/30 to-transparent pointer-events-none z-10" />
             
-            <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 z-20 space-y-3 sm:space-y-4">
+            <div className="absolute bottom-3 sm:bottom-8 left-3 sm:left-8 right-3 sm:right-8 z-20 space-y-2.5 sm:space-y-4">
               <div>
-                <span className="font-mono text-[8px] sm:text-[9px] text-[#ffba20] uppercase tracking-[0.25em] font-black block mb-1">
+                <span className="font-mono text-[7px] sm:text-[9px] text-[#ffba20] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-black block mb-0.5 sm:mb-1">
                   05 // COMMUNITY COEXISTENCE
                 </span>
-                <h5 className="font-display text-lg sm:text-2xl lg:text-3xl font-black text-[#f1e5d1] uppercase tracking-wide">
+                <h5 className="font-display text-sm xs:text-base sm:text-2xl lg:text-3xl font-black text-[#f1e5d1] uppercase tracking-wide">
                   PUP FAO Dance Crew
                 </h5>
               </div>
               
               {/* Highlight statistics badges as seen on screenshots */}
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                <div className="px-3 py-2 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-xl backdrop-blur-md">
-                  <span className="font-display text-lg sm:text-2xl font-black text-[#ffba20] block leading-none mb-1">30+</span>
-                  <span className="font-mono text-[7px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Performers</span>
+                <div className="px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-lg sm:rounded-xl backdrop-blur-md">
+                  <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">30+</span>
+                  <span className="font-mono text-[6.5px] xs:text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Performers</span>
                 </div>
-                <div className="px-3 py-2 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-xl backdrop-blur-md">
-                  <span className="font-display text-lg sm:text-2xl font-black text-[#ffba20] block leading-none mb-1">5+</span>
-                  <span className="font-mono text-[7px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Years Active</span>
+                <div className="px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-lg sm:rounded-xl backdrop-blur-md">
+                  <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">5+</span>
+                  <span className="font-mono text-[6.5px] xs:text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Years Active</span>
                 </div>
               </div>
             </div>
@@ -349,15 +349,15 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
         </div>
 
         {/* Informative block on Right - Ordered first on mobile, last on desktop */}
-        <div className="col-span-12 lg:col-span-7 space-y-4 sm:space-y-6 lg:pl-6 order-1 lg:order-2">
-          <span className="font-mono text-xs text-[#ffba20] uppercase tracking-[0.25em] font-bold block">
+        <div className="col-span-12 lg:col-span-7 space-y-3 sm:space-y-6 lg:pl-6 order-1 lg:order-2">
+          <span className="font-mono text-[10px] sm:text-xs text-[#ffba20] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold block">
             05 / LEADERSHIP BEYOND CODE
           </span>
-          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-black text-[#f1e5d1] tracking-tight leading-[1.05] sm:leading-[0.98] uppercase">
+          <h2 className="font-display text-[1.8rem] xs:text-[2.2rem] sm:text-5xl md:text-6xl font-black text-[#f1e5d1] tracking-tight leading-[1.02] sm:leading-[0.98] uppercase">
             The Rhythm of <br className="hidden sm:inline" />
             Management
           </h2>
-          <div className="font-sans text-xs sm:text-sm md:text-base text-[#d5c4ab]/85 space-y-4 sm:space-y-6 leading-relaxed max-w-2xl">
+          <div className="font-sans text-xs xs:text-[13px] sm:text-base text-[#d5c4ab]/85 space-y-3 sm:space-y-6 leading-relaxed max-w-2xl">
             <p>
               Leading the <strong className="text-[#ffba20] font-bold">PUP FAO Dance Crew</strong> was not merely an artistic endeavor—it was an intensive lesson in large-scale team orchestration, logistical tracking, and strategic execution.
             </p>
