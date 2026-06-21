@@ -62,7 +62,21 @@ export default function AIChatAgent() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to communicate with Digital Twin representative.");
+        let errorMsg = "Failed to communicate with Digital Twin representative.";
+        try {
+          const errData = await res.json();
+          if (errData && (errData.error || errData.message)) {
+            errorMsg = errData.error || errData.message;
+          }
+        } catch (jsonErr) {
+          try {
+            const rawText = await res.text();
+            if (rawText && rawText.length < 200) {
+              errorMsg = rawText;
+            }
+          } catch (textErr) {}
+        }
+        throw new Error(errorMsg);
       }
 
       const data = await res.json();
