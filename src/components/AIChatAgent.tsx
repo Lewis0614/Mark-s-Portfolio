@@ -33,7 +33,47 @@ export default function AIChatAgent() {
   ]);
   const [inputVal, setInputVal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [usedPrompts, setUsedPrompts] = useState<number>(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Sync remaining quota from browser HttpOnly cookie session status on mount
+  useEffect(() => {
+    const fetchQuotaStatus = async () => {
+      try {
+        const res = await fetch("/api/chat/status");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.count !== undefined) {
+            setUsedPrompts(data.count);
+            if (data.count >= 5) {
+              setMessages((prev) => {
+                // Ensure we do not duplicate the closing transmission message
+                if (prev.some((m) => m.text.includes("Transmission quota reached."))) {
+                  return prev;
+                }
+                return [
+                  ...prev,
+                  {
+                    role: "model",
+                    text: `Transmission quota reached.
+
+Thank you for your interest in my portfolio and professional background. For further information regarding my projects, technical expertise, internship experience, leadership roles, or potential collaboration opportunities, please contact me directly via email at jhaymarkortizluis@gmail.com or submit a message through the Secure Transmission Channel available on this website.
+
+I look forward to connecting with you.
+
+— Jhay Mark A. Ortiz Luis`,
+                  },
+                ];
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching quota status:", err);
+      }
+    };
+    fetchQuotaStatus();
+  }, []);
 
   // Auto scroll to bottom of chat
   useEffect(() => {
@@ -41,7 +81,7 @@ export default function AIChatAgent() {
   }, [messages, isLoading]);
 
   const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isLoading) return;
+    if (!textToSend.trim() || isLoading || usedPrompts >= 5) return;
 
     const userMsg: Message = { role: "user", text: textToSend };
     setMessages((prev) => [...prev, userMsg]);
@@ -80,10 +120,35 @@ export default function AIChatAgent() {
       }
 
       const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "model", text: data.text || "Synchronizing channels... please check your prompt again." },
-      ]);
+      
+      setMessages((prev) => {
+        const nextMsgs = [
+          ...prev,
+          { role: "model" as const, text: data.text || "Synchronizing channels... please check your prompt again." }
+        ];
+
+        // If the backend has fulfilled prompt 5, immediately append closure
+        const finalCount = data.count !== undefined ? data.count : (usedPrompts + 1);
+        if (finalCount >= 5) {
+          nextMsgs.push({
+            role: "model",
+            text: `Transmission quota reached.
+
+Thank you for your interest in my portfolio and professional background. For further information regarding my projects, technical expertise, internship experience, leadership roles, or potential collaboration opportunities, please contact me directly via email at jhaymarkortizluis@gmail.com or submit a message through the Secure Transmission Channel available on this website.
+
+I look forward to connecting with you.
+
+— Jhay Mark A. Ortiz Luis`,
+          });
+        }
+        return nextMsgs;
+      });
+
+      if (data.count !== undefined) {
+        setUsedPrompts(data.count);
+      } else {
+        setUsedPrompts((prev) => prev + 1);
+      }
     } catch (e: any) {
       setMessages((prev) => [
         ...prev,
@@ -97,6 +162,9 @@ export default function AIChatAgent() {
     }
   };
 
+  const isQuotaReached = usedPrompts >= 5;
+  const remainingCount = Math.max(0, 5 - usedPrompts);
+
   return (
     <div className="relative group p-3.5 sm:p-6 md:p-10 bg-[#130d05] border border-[#514532]/30 rounded-2xl overflow-hidden cinematic-glow flex flex-col h-[500px] sm:h-[620px] w-full max-w-none">
       {/* Interactive holographic leak effect */}
@@ -107,8 +175,8 @@ export default function AIChatAgent() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-[#514532]/20 mb-4 sm:mb-6">
         <div className="flex items-start gap-2.5 sm:items-center">
           <div className="relative flex h-3 w-3 mt-1 sm:mt-0 shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffba20] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ffba20]"></span>
+            <span className={`${isQuotaReached ? "bg-red-500 animate-pulse" : "bg-[#ffba20] animate-ping"} absolute inline-flex h-full w-full rounded-full opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-3 w-3 ${isQuotaReached ? "bg-red-500" : "bg-[#ffba20]"}`}></span>
           </div>
           <div className="min-w-0">
             <h3 className="font-display text-xs sm:text-sm font-bold tracking-widest text-[#ffdca1] uppercase break-words leading-none">
@@ -119,9 +187,16 @@ export default function AIChatAgent() {
             </p>
           </div>
         </div>
-        <div className="flex items-center sm:justify-end shrink-0">
-          <span className="font-mono text-[9px] sm:text-xs text-[#ffba20]/80 bg-[#ffba20]/10 px-2.5 py-1 rounded border border-[#ffba20]/20 uppercase tracking-wider font-bold">
-            Agent Online
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end shrink-0">
+          <span className="font-mono text-[9px] sm:text-xs text-[#d5c4ab]/70 bg-[#251f14] px-2.5 py-1 rounded border border-[#514532]/30 uppercase tracking-wider font-semibold">
+            Remaining Conversations: {remainingCount}/5
+          </span>
+          <span className={`font-mono text-[9px] sm:text-xs px-2.5 py-1 rounded border uppercase tracking-wider font-bold transition-all duration-300 ${
+            isQuotaReached
+              ? "text-red-500 bg-red-500/10 border-red-500/20"
+              : "text-[#ffba20]/80 bg-[#ffba20]/10 border-[#ffba20]/20"
+          }`}>
+            {isQuotaReached ? "Quota Reached" : "Agent Online"}
           </span>
         </div>
       </div>
@@ -176,9 +251,9 @@ export default function AIChatAgent() {
             <button
               key={i}
               type="button"
-              disabled={isLoading}
+              disabled={isLoading || isQuotaReached}
               onClick={() => handleSend(prompt.text)}
-              className="text-[10px] sm:text-xs bg-[#211b11] hover:bg-[#30291e] border border-[#514532]/40 hover:border-[#ffdca1]/40 text-[#d5c4ab] hover:text-[#ffdca1] transition-all px-2.5 py-1.5 rounded-lg text-left break-words w-full sm:w-auto font-mono uppercase tracking-wider leading-snug"
+              className="text-[10px] sm:text-xs bg-[#211b11] hover:bg-[#30291e] border border-[#514532]/40 hover:border-[#ffdca1]/40 text-[#d5c4ab] hover:text-[#ffdca1] transition-all px-2.5 py-1.5 rounded-lg text-left break-words w-full sm:w-auto font-mono uppercase tracking-wider leading-snug disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#211b11] disabled:hover:border-[#514532]/40"
             >
               {prompt.label}
             </button>
@@ -198,14 +273,14 @@ export default function AIChatAgent() {
           type="text"
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
-          placeholder="Ask a technical or leadership question..."
-          className="flex-1 bg-[#181309] border border-[#514532] text-[#ede1d0] rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 placeholder-[#d5c4ab]/30 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs sm:text-sm min-w-0"
-          disabled={isLoading}
+          placeholder={isQuotaReached ? "Transmission quota reached. Under communications freeze." : "Ask a technical or leadership question..."}
+          className="flex-1 bg-[#181309] border border-[#514532] text-[#ede1d0] rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 placeholder-[#d5c4ab]/30 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs sm:text-sm min-w-0 disabled:opacity-40 disabled:cursor-not-allowed"
+          disabled={isLoading || isQuotaReached}
         />
         <button
           type="submit"
-          disabled={isLoading || !inputVal.trim()}
-          className="bg-[#ffb800] hover:bg-[#ffba20] text-[#271900] disabled:bg-[#3b3428] disabled:text-[#d5c4ab]/40 rounded-xl px-4 sm:px-5 flex items-center justify-center transition-colors font-bold shrink-0"
+          disabled={isLoading || isQuotaReached || !inputVal.trim()}
+          className="bg-[#ffb800] hover:bg-[#ffba20] text-[#271900] disabled:bg-[#3b3428] disabled:text-[#d5c4ab]/40 rounded-xl px-4 sm:px-5 flex items-center justify-center transition-colors font-bold shrink-0 disabled:cursor-not-allowed"
         >
           <span className="material-symbols-outlined text-base sm:text-lg">send</span>
         </button>

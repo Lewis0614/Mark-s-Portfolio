@@ -77,12 +77,60 @@ Response Style Guidelines:
 - Invite users to email Jhay Mark at jhaymarkortizluis@gmail.com or call 0939-830-9890.
 `;
 
+function parseCookies(cookieHeader?: string) {
+  const cookies: Record<string, string> = {};
+  if (!cookieHeader) return cookies;
+  cookieHeader.split(";").forEach((cookie) => {
+    const parts = cookie.split("=");
+    if (parts.length === 2) {
+      cookies[parts[0].trim()] = parts[1].trim();
+    }
+  });
+  return cookies;
+}
+
+// API endpoint to return current chat status and remaining quota
+app.get("/api/chat/status", (req, res) => {
+  const cookies = parseCookies(req.headers.cookie);
+  const cookieCountStr = cookies["chat_quota"];
+  let currentCount = cookieCountStr ? parseInt(cookieCountStr, 10) : 0;
+  if (isNaN(currentCount)) currentCount = 0;
+  res.json({ count: currentCount });
+});
+
 // API endpoint for chatbot query
 app.post("/api/chat", async (req, res) => {
   try {
     const { message, history } = req.body;
     if (!message) {
       return res.status(400).json({ error: "Message is required." });
+    }
+
+    // Parse cookie-based session count
+    const cookies = parseCookies(req.headers.cookie);
+    const cookieCountStr = cookies["chat_quota"];
+    let cookieCount = cookieCountStr ? parseInt(cookieCountStr, 10) : 0;
+    if (isNaN(cookieCount)) cookieCount = 0;
+
+    // Count user messages in the chat history
+    const userPromptsInHistory = history ? history.filter((h: any) => h.role === "user").length : 0;
+
+    // Use the maximum of either value to protect against browser console bypasses
+    const actualPromptCount = Math.max(cookieCount, userPromptsInHistory);
+
+    // If quota is already filled (>= 5 user prompts have been addressed), directly block and send the final closing message
+    if (actualPromptCount >= 5) {
+      return res.json({
+        text: `Transmission quota reached.
+
+Thank you for your interest in my portfolio and professional background. For further information regarding my projects, technical expertise, internship experience, leadership roles, or potential collaboration opportunities, please contact me directly via email at jhaymarkortizluis@gmail.com or submit a message through the Secure Transmission Channel available on this website.
+
+I look forward to connecting with you.
+
+— Jhay Mark A. Ortiz Luis`,
+        count: actualPromptCount,
+        quotaReached: true,
+      });
     }
 
     // Prepare contents containing system instruction and conversation context
@@ -114,7 +162,17 @@ app.post("/api/chat", async (req, res) => {
       },
     });
 
-    res.json({ text: response.text });
+    // Increment conversation count
+    const nextCount = actualPromptCount + 1;
+
+    // Save strictly securely using HttpOnly cookie so browser console scripts cannot alter or read it
+    const isProd = process.env.NODE_ENV === "production";
+    res.setHeader(
+      "Set-Cookie",
+      `chat_quota=${nextCount}; Path=/; HttpOnly; SameSite=Strict; Max-Age=31536000${isProd ? "; Secure" : ""}`
+    );
+
+    res.json({ text: response.text, count: nextCount });
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     res.status(500).json({ error: error.message || "An error occurred with Gemini." });
