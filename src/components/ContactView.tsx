@@ -75,14 +75,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         }),
       });
 
-      let result: any = {};
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        const text = await response.text();
-        result = { error: text || `HTTP Error ${response.status}: ${response.statusText}` };
-      }
+      const result = await response.json();
 
       // Ensure that our neat security sequencing completes gracefully
       await new Promise((resolve) => setTimeout(resolve, 1800));
@@ -102,12 +95,12 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         setTimeout(() => setShowToast(false), 5000);
       } else {
         setIsError(true);
-        setErrorMessage(result.error || `Unable to establish secure delivery. (Status: ${response.status})`);
+        setErrorMessage(result.error || "Unable to establish secure delivery.");
       }
     } catch (err: any) {
       stepIntervals.forEach((t) => clearTimeout(t));
       setIsError(true);
-      setErrorMessage(`Unable to establish secure delivery. Please try again. [Detail: ${err.message || err}]`);
+      setErrorMessage("Unable to establish secure delivery. Please try again in a moment.");
     } finally {
       setIsSubmitting(false);
       setSendStep(0);
