@@ -114,12 +114,29 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         }, 3000);
       } else {
         setIsError(true);
-        setErrorMessage(result.error || "Unable to establish secure delivery.");
+        let cleanErr = "Unable to establish secure delivery at this time. Please try again in a moment.";
+        if (result.error && typeof result.error === "string") {
+          const lower = result.error.toLowerCase();
+          if (
+            !lower.includes("function_invocation_failed") &&
+            !lower.includes("internal server error") &&
+            !lower.includes("vercel") &&
+            !result.error.trim().startsWith("<") &&
+            result.error.length < 150
+          ) {
+            cleanErr = result.error;
+          }
+        }
+        setErrorMessage(
+          `${cleanErr} Or, feel free to contact me directly at: jhaymarkortizluis@gmail.com`
+        );
       }
     } catch (err: any) {
       stepIntervals.forEach((t) => clearTimeout(t));
       setIsError(true);
-      setErrorMessage("Unable to establish secure delivery. Please try again in a moment.");
+      setErrorMessage(
+        "Unable to establish secure delivery at this time. Please try again in a moment, or feel free to contact me directly via email at jhaymarkortizluis@gmail.com"
+      );
     } finally {
       setIsSubmitting(false);
       setSendStep(0);
@@ -285,10 +302,11 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               <input
                 type="text"
                 required
-                disabled={isSubmitting || isSuccess}
+                disabled={isSubmitting}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
+                  setIsSuccess(false);
                   setIsError(false);
                   setErrorMessage("");
                   if (validationErrors.name) {
@@ -300,7 +318,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                   validationErrors.name
                     ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
                     : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
-                } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
+                }`}
               />
               {validationErrors.name && (
                 <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">
@@ -317,10 +335,11 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                 <input
                   type="email"
                   required
-                  disabled={isSubmitting || isSuccess}
+                  disabled={isSubmitting}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    setIsSuccess(false);
                     setIsError(false);
                     setErrorMessage("");
                     if (validationErrors.email) {
@@ -332,7 +351,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                     validationErrors.email
                       ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
                       : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
-                  } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
+                  }`}
                 />
                 {validationErrors.email && (
                   <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">
@@ -346,16 +365,15 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                   Collaboration Subject Domain
                 </label>
                 <select
-                  disabled={isSubmitting || isSuccess}
+                  disabled={isSubmitting}
                   value={subject}
                   onChange={(e) => {
                     setSubject(e.target.value);
+                    setIsSuccess(false);
                     setIsError(false);
                     setErrorMessage("");
                   }}
-                  className={`w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans cursor-pointer h-[46px] ${
-                    isSuccess ? "opacity-75 cursor-not-allowed" : ""
-                  }`}
+                  className="w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans cursor-pointer h-[46px]"
                 >
                   <option value="General Collaboration">General Collaboration</option>
                   <option value="Project Hiring Request">Project Hiring Request</option>
@@ -372,11 +390,12 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               </label>
               <textarea
                 required
-                disabled={isSubmitting || isSuccess}
+                disabled={isSubmitting}
                 rows={5}
                 value={message}
                 onChange={(e) => {
                   setMessage(e.target.value);
+                  setIsSuccess(false);
                   setIsError(false);
                   setErrorMessage("");
                   if (validationErrors.message) {
@@ -388,7 +407,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                   validationErrors.message
                     ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
                     : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
-                } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
+                }`}
               />
               {validationErrors.message && (
                 <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">

@@ -8,7 +8,14 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+// Safe, serverless-compatible body parser middleware wrapper to prevent Vercel stream-read hanging
+app.use((req: any, res, next) => {
+  if (req.body && typeof req.body === "object") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 // Helper for lazy initialization of server-side Gemini API client
 let aiClient: GoogleGenAI | null = null;
