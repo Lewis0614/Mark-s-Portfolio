@@ -75,7 +75,14 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         }),
       });
 
-      const result = await response.json();
+      let result: any = {};
+      const responseText = await response.text();
+      try {
+        result = JSON.parse(responseText);
+      } catch (parseErr) {
+        // Safe fallback if response is not valid JSON
+        result = { error: responseText || "Unable to establish secure delivery due to server response format." };
+      }
 
       // Ensure that our neat security sequencing completes gracefully
       await new Promise((resolve) => setTimeout(resolve, 1800));
@@ -94,7 +101,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         setShowToast(true);
         setTimeout(() => setShowToast(false), 5000);
 
-        // Auto-reset the form after 3.5 seconds to allow sending multiple messages
+        // Auto-reset the form after 3 seconds to allow sending multiple messages
         setTimeout(() => {
           setName("");
           setEmail("");
@@ -104,7 +111,7 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
           setIsError(false);
           setErrorMessage("");
           setValidationErrors({});
-        }, 3500);
+        }, 3000);
       } else {
         setIsError(true);
         setErrorMessage(result.error || "Unable to establish secure delivery.");
@@ -282,6 +289,8 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
+                  setIsError(false);
+                  setErrorMessage("");
                   if (validationErrors.name) {
                     setValidationErrors((prev) => ({ ...prev, name: undefined }));
                   }
@@ -312,6 +321,8 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    setIsError(false);
+                    setErrorMessage("");
                     if (validationErrors.email) {
                       setValidationErrors((prev) => ({ ...prev, email: undefined }));
                     }
@@ -337,7 +348,11 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                 <select
                   disabled={isSubmitting || isSuccess}
                   value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
+                  onChange={(e) => {
+                    setSubject(e.target.value);
+                    setIsError(false);
+                    setErrorMessage("");
+                  }}
                   className={`w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans cursor-pointer h-[46px] ${
                     isSuccess ? "opacity-75 cursor-not-allowed" : ""
                   }`}
@@ -362,6 +377,8 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                 value={message}
                 onChange={(e) => {
                   setMessage(e.target.value);
+                  setIsError(false);
+                  setErrorMessage("");
                   if (validationErrors.message) {
                     setValidationErrors((prev) => ({ ...prev, message: undefined }));
                   }
