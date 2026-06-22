@@ -2,34 +2,17 @@ import { useState } from "react";
 import { EXPERIENCE, PROFILE } from "../data";
 import Footer from "./Footer";
 
-const FAO_EVENTS = [
-  {
-    name: "PUP Arts Olympiad",
-    role: "Internal President & Coordinator",
-    stat: "Gold Cup Champions",
-    budget: "Strict systematic allocation",
-    desc: "Managed the financial planning, rehearsal schedules, and overall operations for over 30 performers, resulting in an award-winning staging.",
-  },
-  {
-    name: "Grand Intramural Parade",
-    role: "Director of Logistics",
-    stat: "1,200+ Audience Members",
-    budget: "Artistic/Supply clearance",
-    desc: "Created complex blocking layouts, sound systems alignment, and physical safety routes for the grand opening dance routine.",
-  },
-];
-
 interface StoryViewProps {
   onNavigate: (tab: string) => void;
 }
 
 export default function StoryView({ onNavigate }: StoryViewProps) {
   const [profileImgSrc, setProfileImgSrc] = useState<string>(PROFILE.profileImage);
-  const [activeBuildCard, setActiveBuildCard] = useState<number>(0);
-  const [activeMindsetCard, setActiveMindsetCard] = useState<number>(0);
+  const [activeBuildCard, setActiveBuildCard] = useState<number | null>(null);
+  const [activeMindsetCard, setActiveMindsetCard] = useState<number | null>(null);
   const [activeExperienceCard, setActiveExperienceCard] = useState<string>("exp-1");
-  const [activeLeadershipCard, setActiveLeadershipCard] = useState<number>(0);
-  const [activeStatCard, setActiveStatCard] = useState<number>(0);
+  const [activeStatCard, setActiveStatCard] = useState<number | null>(null);
+  const [isProfileActive, setIsProfileActive] = useState<boolean>(false);
 
   return (
     <div className="space-y-10 sm:space-y-24 md:space-y-32">
@@ -39,9 +22,22 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-start">
           
           {/* Portrait Photo on Left */}
-          <div className="col-span-12 lg:col-span-5 relative group z-10">
-            <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl pointer-events-none" />
-            <div className="relative rounded-2xl border border-[#514532]/25 group-hover:border-[#ffba20]/50 group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)] transition-all duration-500 aspect-[4/5] max-w-[270px] xs:max-w-[310px] sm:max-w-md mx-auto bg-[#130d05] shadow-2xl">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setIsProfileActive(!isProfileActive);
+              }
+            }}
+            className="col-span-12 lg:col-span-5 relative group z-10 cursor-pointer"
+          >
+            <div className={`absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl transition-opacity duration-700 pointer-events-none ${
+              isProfileActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`} />
+            <div className={`relative rounded-2xl border transition-all duration-500 aspect-[4/5] max-w-[270px] xs:max-w-[310px] sm:max-w-md mx-auto bg-[#130d05] shadow-2xl ${
+              isProfileActive
+                ? "border-[#ffba20]/55 shadow-[0_0_25px_rgba(255,186,32,0.25)] md:border-[#514532]/25 md:shadow-none md:group-hover:border-[#ffba20]/50 md:group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)]"
+                : "border-[#514532]/25 group-hover:border-[#ffba20]/50 group-hover:shadow-[0_0_25px_rgba(255,186,32,0.3)]"
+            }`}>
               <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10 rounded-2xl" />
               <img
                 src={profileImgSrc}
@@ -56,11 +52,19 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
               />
               
               {/* "System Dev" Caption Overlay Badge */}
-              <div className="absolute bottom-1.5 right-1.5 sm:-bottom-4 sm:-right-4 bg-[#1a140c] border border-[#ffba20]/30 rounded-lg sm:rounded-xl px-3 py-2 sm:px-6 sm:py-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)] z-20 min-w-[125px] sm:min-w-[200px]">
-                <span className="font-mono text-[7px] sm:text-[9px] text-[#ffba20]/75 uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold block mb-0.5 sm:mb-1">
+              <div className={`absolute bottom-1.5 right-1.5 sm:-bottom-4 sm:-right-4 bg-[#1a140c] rounded-lg sm:rounded-xl px-3 py-2 sm:px-6 sm:py-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)] z-20 min-w-[125px] sm:min-w-[200px] border transition-all duration-500 ${
+                isProfileActive
+                  ? "border-[#ffba20] shadow-[0_0_20px_rgba(255,186,32,0.25)] md:border-[#ffba20]/30 md:shadow-none md:group-hover:border-[#ffba20]/55"
+                  : "border-[#ffba20]/15 group-hover:border-[#ffba20]/55 group-hover:shadow-[0_0_20px_rgba(255,186,32,0.15)]"
+              }`}>
+                <span className={`font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold block mb-0.5 sm:mb-1 transition-colors duration-500 ${
+                  isProfileActive ? "text-[#ffba20]" : "text-[#ffba20]/60 group-hover:text-[#ffba20]"
+                }`}>
                   CURRENT // FOCUS
                 </span>
-                <span className="font-display text-base sm:text-3xl font-black text-[#ede1d0] tracking-tight block leading-none">
+                <span className={`font-display text-base sm:text-3xl font-black tracking-tight block leading-none transition-colors duration-500 ${
+                  isProfileActive ? "text-[#ede1d0]" : "text-[#ede1d0]/80 group-hover:text-[#ede1d0]"
+                }`}>
                   System Dev
                 </span>
               </div>
@@ -337,11 +341,13 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                     setActiveExperienceCard(exp.id);
                   }
                 }}
-                className="relative group space-y-3 lg:space-y-4 w-full cursor-pointer"
+                className="relative group space-y-3 lg:space-y-4 w-full cursor-pointer focus:outline-none active:outline-none select-none"
               >
                 {/* Timeline yellow glowing indicator node */}
-                <div className={`absolute -left-[31px] sm:-left-[47px] lg:-left-[53px] top-1.5 lg:top-[53px] w-2.5 h-2.5 bg-[#ffba20] rounded-full ring-[5px] ring-[#ffba20]/15 shadow-[0_0_12px_rgba(255,184,0,0.85)] transition-all duration-300 pointer-events-none ${
-                  isCurrentActive ? "scale-125 md:scale-100 md:group-hover:scale-125" : "group-hover:scale-100 md:group-hover:scale-125"
+                <div className={`absolute -left-[31px] sm:-left-[47px] lg:-left-[53px] top-1.5 lg:top-[53px] w-2.5 h-2.5 bg-[#ffba20] rounded-full transition-all duration-300 ease-out pointer-events-none border-none outline-none ring-0 ${
+                  isCurrentActive 
+                    ? "scale-125 shadow-[0_0_14px_rgba(255,186,32,0.85)]" 
+                    : "scale-100 group-hover:scale-125 shadow-none group-hover:shadow-[0_0_10px_rgba(255,186,32,0.6)]"
                 }`} />
                 
                 {/* Period/Year - Large and clear above the card */}
@@ -350,10 +356,10 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                 </div>
 
                 {/* Timeline entry card */}
-                <div className={`w-full bg-[#130d05]/30 border rounded-2xl p-5 sm:p-8 transition-all duration-500 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 lg:hover:bg-transparent ${
+                <div className={`w-full transition-all duration-500 rounded-2xl p-5 sm:p-8 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 border-0 md:border lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 lg:hover:bg-transparent ${
                   isCurrentActive
-                    ? "border-[#ffba20]/45 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/15 md:shadow-[0_4px_30px_rgba(0,0,0,0.4)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
-                    : "border-[#514532]/15 hover:border-[#ffba20]/30 hover:bg-[#130d05]/50"
+                    ? "bg-[#130d05]/55 md:bg-[#130d05]/30 border-transparent md:border-[#ffba20]/45 shadow-[0_0_18px_rgba(255,186,32,0.12)] md:shadow-[0_4px_30px_rgba(0,0,0,0.4)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
+                    : "bg-[#130d05]/30 border-transparent md:border-[#514532]/15 hover:bg-[#130d05]/45 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
                 }`}>
                   {/* Header info */}
                   <div className="space-y-2 lg:space-y-3">
@@ -421,10 +427,10 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                       setActiveStatCard(0);
                     }
                   }}
-                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all ${
+                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all duration-300 ${
                     activeStatCard === 0
-                      ? "border-[#ffba20]/50 shadow-[0_0_10px_rgba(255,186,32,0.2)] md:border-[#ffba20]/15"
-                      : "border-[#ffba20]/15"
+                      ? "border-[#ffba20]/70 shadow-[0_0_12px_rgba(255,186,32,0.25)] md:border-[#ffba20]/20 md:shadow-none"
+                      : "border-[#ffba20]/15 hover:border-[#ffba20]/50 hover:shadow-[0_0_12px_rgba(255,186,32,0.15)]"
                   }`}
                 >
                   <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">30+</span>
@@ -436,10 +442,10 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                       setActiveStatCard(1);
                     }
                   }}
-                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all ${
+                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all duration-300 ${
                     activeStatCard === 1
-                      ? "border-[#ffba20]/50 shadow-[0_0_10px_rgba(255,186,32,0.2)] md:border-[#ffba20]/15"
-                      : "border-[#ffba20]/15"
+                      ? "border-[#ffba20]/70 shadow-[0_0_12px_rgba(255,186,32,0.25)] md:border-[#ffba20]/20 md:shadow-none"
+                      : "border-[#ffba20]/15 hover:border-[#ffba20]/50 hover:shadow-[0_0_12px_rgba(255,186,32,0.15)]"
                   }`}
                 >
                   <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">5+</span>
@@ -471,47 +477,7 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             </p>
           </div>
 
-          {/* Core Leadership Events - PUP Arts Olympiad & Grand Intramural Parade */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-6 border-t border-[#514532]/10">
-            {FAO_EVENTS.map((evt, idx) => {
-              const isLeadershipActive = activeLeadershipCard === idx;
-              return (
-                <div
-                  key={evt.name}
-                  onClick={() => {
-                    if (window.innerWidth <= 768) {
-                      setActiveLeadershipCard(idx);
-                    }
-                  }}
-                  className={`group relative bg-[#130d05]/30 border transition-all duration-500 rounded-xl p-5 cinematic-glow cursor-pointer ${
-                    isLeadershipActive
-                      ? "border-[#ffba20]/50 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/20 md:shadow-none md:hover:border-[#ffba20]/35 md:hover:shadow-[0_0_15px_rgba(255,186,32,0.15)]"
-                      : "border-[#514532]/20 hover:border-[#ffba20]/35 hover:shadow-[0_0_15px_rgba(255,186,32,0.15)]"
-                  }`}
-                >
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <span className="material-symbols-outlined text-[#ffba20] text-xl">
-                        {idx === 0 ? "emoji_events" : "alt_route"}
-                      </span>
-                      <span className="font-mono text-[8px] text-[#ffba20] bg-[#ffba20]/10 border border-[#ffba20]/20 px-2 py-0.5 rounded font-black uppercase tracking-wider">
-                        {evt.stat}
-                      </span>
-                    </div>
-                    <h4 className="font-display text-sm font-black uppercase text-[#ede1d0] tracking-wider leading-snug">
-                      {evt.name}
-                    </h4>
-                    <p className="font-mono text-[8px] text-[#ffba20]/80 uppercase tracking-widest font-semibold">
-                      {evt.role}
-                    </p>
-                    <p className="font-sans text-[11px] text-[#d5c4ab]/70 leading-relaxed pt-1">
-                      {evt.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+
         </div>
       </section>
 

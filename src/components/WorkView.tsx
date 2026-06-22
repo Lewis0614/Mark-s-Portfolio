@@ -26,8 +26,8 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
   const [calcDisplay, setCalcDisplay] = useState("0");
   const [calcBase, setCalcBase] = useState<"DEC" | "BIN" | "HEX">("DEC");
 
-  const [activeProjectCard, setActiveProjectCard] = useState<number>(0);
-  const [activeUtilityCard, setActiveUtilityCard] = useState<number>(0);
+  const [activeProjectCard, setActiveProjectCard] = useState<number | null>(null);
+  const [activeUtilityCard, setActiveUtilityCard] = useState<number | null>(null);
 
   const docContents: { [key: string]: { code: string; title: string; tech: string } } = {
     doc1: { code: "PUP-REG-2026-X9", title: "PUP Enrollment Grid Registry", tech: "NodeJS + PostgreSQL" },
@@ -162,8 +162,8 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
           <div className={`absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl transition-opacity duration-700 pointer-events-none ${
             activeProjectCard === 0 ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
           }`} />
-          <div className={`relative overflow-hidden rounded-2xl border shadow-2xl bg-[#130d05] h-auto sm:aspect-[16/10] transition-colors duration-500 ${
-            activeProjectCard === 0 ? "border-[#ffba20]/55" : "border-[#514532]/25"
+          <div className={`relative overflow-hidden rounded-2xl border shadow-2xl bg-[#130d05] h-auto sm:aspect-[16/10] transition-all duration-500 ${
+            activeProjectCard === 0 ? "border-[#ffba20]/55" : "border-[#514532]/25 group-hover:border-[#ffba20]/45"
           }`}>
             <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10" />
             <img
@@ -245,7 +245,7 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
             className={`relative overflow-hidden rounded-lg border shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full max-w-none transition-all duration-500 cursor-pointer ${
               activeProjectCard === 1
                 ? "border-[#ffba20]/50 shadow-[0_0_20px_rgba(255,186,32,0.25)] md:border-[#514532]/20 md:shadow-none"
-                : "border-[#514532]/20"
+                : "border-[#514532]/20 hover:border-[#ffba20]/30 group-hover:border-[#ffba20]/35"
             }`}
           >
             
@@ -346,7 +346,7 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
             className={`relative overflow-hidden rounded-lg border shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full transition-all duration-500 cursor-pointer ${
               activeProjectCard === 2
                 ? "border-[#ffba20]/50 shadow-[0_0_20px_rgba(255,186,32,0.25)] md:border-[#514532]/20 md:shadow-none"
-                : "border-[#514532]/20"
+                : "border-[#514532]/20 hover:border-[#ffba20]/30 group-hover:border-[#ffba20]/35"
             }`}
           >
             
