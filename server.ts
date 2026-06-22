@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
-import { Resend } from "resend";
 
 dotenv.config();
 
@@ -209,56 +208,76 @@ app.post("/api/contact", async (req, res) => {
       });
     }
 
-    // Lazy initialization of Resend client to avoid module-load crashes if API key is empty
-    const resend = new Resend(apiKey);
     const destinationEmail = process.env.CONTACT_TO_EMAIL || "jhaymarkortizluis@gmail.com";
 
-    const emailResponse = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
-      to: destinationEmail,
-      replyTo: emailStr,
-      subject: `[Portfolio] ${subject}: ${name}`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; padding: 20px; background-color: #fafafa; color: #181309;">
-          <h2 style="color: #ffba20; border-bottom: 2px solid #ffba20; padding-bottom: 8px; margin-top: 0;">Secure Transmission Received</h2>
-          <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-            <tr>
-              <td style="padding: 6px 0; font-weight: bold; width: 120px; vertical-align: top;">Name:</td>
-              <td style="padding: 6px 0; color: #333;">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Email:</td>
-              <td style="padding: 6px 0; color: #333;"><a href="mailto:${emailStr}">${emailStr}</a></td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Subject:</td>
-              <td style="padding: 6px 0; color: #333;">${subject}</td>
-            </tr>
-            <tr>
-              <td style="padding: 12px 0 6px 0; font-weight: bold; vertical-align: top;" colspan="2">Message:</td>
-            </tr>
-            <tr>
-              <td style="padding: 12px; background-color: #fff; border: 1px solid #e1e1e1; border-radius: 6px; white-space: pre-wrap; font-family: sans-serif; font-size: 14px; line-height: 1.5; color: #111;" colspan="2">${message}</td>
-            </tr>
-          </table>
-          <hr style="border: none; border-top: 1px solid #eaeaea; margin: 25px 0 15px 0;">
-          <p style="font-size: 11px; color: #777; margin: 0;">
-            <strong>Timestamp:</strong> ${new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" })} (Manila Time)<br>
-            <strong>Source:</strong> Portfolio Secure Transmission Channel
-          </p>
-        </div>
-      `
+    let manilaTimeStr = "";
+    try {
+      manilaTimeStr = new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" });
+    } catch (e) {
+      manilaTimeStr = new Date().toISOString() + " (UTC)";
+    }
+
+    const emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Portfolio Contact <onboarding@resend.dev>",
+        to: [destinationEmail],
+        reply_to: emailStr,
+        subject: `[Portfolio] ${subject}: ${name}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; padding: 20px; background-color: #fafafa; color: #181309;">
+            <h2 style="color: #ffba20; border-bottom: 2px solid #ffba20; padding-bottom: 8px; margin-top: 0;">Secure Transmission Received</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+              <tr>
+                <td style="padding: 6px 0; font-weight: bold; width: 120px; vertical-align: top;">Name:</td>
+                <td style="padding: 6px 0; color: #333;">${name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Email:</td>
+                <td style="padding: 6px 0; color: #333;"><a href="mailto:${emailStr}">${emailStr}</a></td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Subject:</td>
+                <td style="padding: 6px 0; color: #333;">${subject}</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px 0 6px 0; font-weight: bold; vertical-align: top;" colspan="2">Message:</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; background-color: #fff; border: 1px solid #e1e1e1; border-radius: 6px; white-space: pre-wrap; font-family: sans-serif; font-size: 14px; line-height: 1.5; color: #111;" colspan="2">${message}</td>
+              </tr>
+            </table>
+            <hr style="border: none; border-top: 1px solid #eaeaea; margin: 25px 0 15px 0;">
+            <p style="font-size: 11px; color: #777; margin: 0;">
+              <strong>Timestamp:</strong> ${manilaTimeStr} (Manila Time)<br>
+              <strong>Source:</strong> Portfolio Secure Transmission Channel
+            </p>
+          </div>
+        `
+      })
     });
 
-    if (emailResponse.error) {
-      console.error("Resend API returned an error:", emailResponse.error);
+    let resultData: any = {};
+    const responseText = await emailResponse.text();
+    try {
+      resultData = JSON.parse(responseText);
+    } catch (_) {
+      resultData = { error: { message: responseText } };
+    }
+
+    if (!emailResponse.ok || resultData.error) {
+      console.error("Resend API returned an error:", resultData.error);
       return res.status(500).json({
         status: "error",
-        error: `Resend Error: ${emailResponse.error.message || "Unable to send message."}`
+        error: `Resend Error: ${resultData.error?.message || "Unable to send message."}`
       });
     }
 
-    res.json({ status: "success", data: emailResponse.data });
+    res.json({ status: "success", data: resultData });
   } catch (error: any) {
     console.error("Exception in /api/contact route:", error);
     res.status(500).json({
