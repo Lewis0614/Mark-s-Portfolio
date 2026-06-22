@@ -189,40 +189,40 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
       </section>
 
       {/* 3. "Engineering Mindset" Section (Column 2) */}
-      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-12">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 pb-6 border-b border-[#514532]/10">
+      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-6 sm:py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 sm:mb-12 gap-3 sm:gap-6 pb-4 sm:pb-6 border-b border-[#514532]/10">
           <div>
-            <span className="font-mono text-xs text-[#ffba20] uppercase tracking-[0.3em] font-semibold block mb-1">
+            <span className="font-mono text-[10px] sm:text-xs text-[#ffba20] uppercase tracking-[0.2em] sm:tracking-[0.3em] font-semibold block mb-0.5 sm:mb-1">
               03 / PHILOSOPHICAL FRAME
             </span>
-            <h3 className="font-display text-3xl sm:text-4xl font-black text-[#ede1d0] uppercase tracking-wide">
+            <h3 className="font-display text-2xl sm:text-4xl font-black text-[#ede1d0] uppercase tracking-wide">
               Engineering Mindset
             </h3>
           </div>
-          <span className="font-mono text-[11px] text-[#d5c4ab]/40 uppercase tracking-widest font-bold">CORE PARADIGMS</span>
+          <span className="font-mono text-[9px] sm:text-[11px] text-[#d5c4ab]/40 uppercase tracking-widest font-bold">CORE PARADIGMS</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-6 rounded hover:border-[#ffba20]/20 transition-colors">
-            <span className="material-symbols-outlined text-[#ffba20] text-3xl">account_tree</span>
-            <h4 className="font-display text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Systems Thinking</h4>
-            <p className="font-sans text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+            <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">account_tree</span>
+            <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Systems Thinking</h4>
+            <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
               We analyze full system lifecycles. From initial physical trigger, down database persistence pipelines, to the responsive browser UI interface.
             </p>
           </div>
           
-          <div className="space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-6 rounded hover:border-[#ffba20]/20 transition-colors">
-            <span className="material-symbols-outlined text-[#ffba20] text-3xl">troubleshoot</span>
-            <h4 className="font-display text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Problem Analysis</h4>
-            <p className="font-sans text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
+          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+            <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">troubleshoot</span>
+            <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Problem Analysis</h4>
+            <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
               Deconstructing large, complex, ambiguous requirements down to strict, clean, typed modular procedures that ensure safe deployment.
             </p>
           </div>
 
-          <div className="space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-6 rounded hover:border-[#ffba20]/20 transition-colors">
-            <span className="material-symbols-outlined text-[#ffba20] text-3xl">network_check</span>
-            <h4 className="font-display text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Optimization</h4>
-            <p className="font-sans text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
+          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+            <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">network_check</span>
+            <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Optimization</h4>
+            <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
               Always optimizing code workflows, maximizing database lookups efficiency, reducing audio response latency, and enforcing clean interfaces.
             </p>
           </div>

@@ -12,7 +12,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
     <div className="space-y-10 sm:space-y-24 md:space-y-32">
       
       {/* Hero Section */}
-      <section className="relative min-h-[45vh] xs:min-h-[50vh] sm:min-h-[60vh] lg:min-h-[65vh] flex flex-col justify-center pt-0 sm:pt-4 lg:pt-6 pb-6 sm:pb-12 overflow-hidden">
+      <section className="relative min-h-[40vh] xs:min-h-[45vh] sm:min-h-[60vh] lg:min-h-[65vh] flex flex-col justify-center pt-0 sm:pt-4 lg:pt-6 pb-4 sm:pb-12 overflow-hidden">
         {/* Background Atmospheric Lighting */}
         <div className="absolute inset-0 z-0 bg-[#181309]/50">
           <div
@@ -25,7 +25,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </div>
 
         {/* Content Canvas */}
-        <div className="relative z-10 w-full px-4 sm:px-8 lg:px-12 flex flex-col items-start max-w-7xl mx-auto flex-1 justify-center py-2 sm:py-6">
+        <div className="relative z-10 w-full px-4 sm:px-8 lg:px-12 flex flex-col items-start max-w-7xl mx-auto flex-1 justify-center py-1 sm:py-6">
           <div className="grid grid-cols-12 w-full gap-8 items-center">
             {/* Vertical Editorial Metadata */}
             <div className="hidden lg:block col-span-1 border-r border-[#514532]/20 pr-6 h-48 flex items-center justify-center">
@@ -41,14 +41,14 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
-                className="space-y-3 sm:space-y-6 mb-5 sm:mb-10"
+                className="space-y-2 sm:space-y-6 mb-3 sm:mb-10"
               >
                 <div>
-                  <span className="inline-block font-mono text-[9px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#ffba20] bg-[#271f11]/60 px-2.5 py-1 sm:px-4 sm:py-2 border border-[#ffba20]/20 rounded font-bold">
+                  <span className="inline-block font-mono text-[8.5px] sm:text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.3em] text-[#ffba20] bg-[#271f11]/60 px-2 py-1 sm:px-4 sm:py-2 border border-[#ffba20]/20 rounded font-bold">
                     FUTURE-FORWARD DEVELOPMENT
                   </span>
                 </div>
-                <h1 className="font-display text-[2rem] xs:text-[2.6rem] sm:text-7xl md:text-8xl lg:text-[7.5rem] text-[#ede1d0] font-black leading-[0.95] sm:leading-[0.9] tracking-tighter max-w-6xl">
+                <h1 className="font-display text-[1.75rem] xs:text-[2.3rem] sm:text-7xl md:text-8xl lg:text-[7.5rem] text-[#ede1d0] font-black leading-[0.92] sm:leading-[0.9] tracking-tight sm:tracking-tighter max-w-6xl">
                   <span className="text-[#f1e5d1] tracking-tight drop-shadow-[0_0_25px_rgba(255,186,32,0.15)] block">JHAY MARK</span>
                   <span className="text-[#ede1d0] font-bold block">ORTIZ LUIS</span>
                 </h1>
@@ -59,17 +59,17 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-8 mb-6 sm:mb-12 border-t border-[#514532]/15 pt-4 sm:pt-8"
+                className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-8 mb-4 sm:mb-12 border-t border-[#514532]/15 pt-3 sm:pt-8"
               >
-                <div className="md:col-span-6 border-l-2 border-[#ffba20] pl-4 sm:pl-6 py-1">
-                  <h2 className="font-display text-sm xs:text-base sm:text-2xl text-[#ede1d0]/90 leading-snug font-bold">
+                <div className="md:col-span-6 border-l-2 border-[#ffba20] pl-3.5 sm:pl-6 py-0.5">
+                  <h2 className="font-display text-[12.5px] xs:text-sm sm:text-2xl text-[#ede1d0]/90 leading-snug font-bold">
                     Computer Engineering Student <br />
                     <span className="text-[#ffba20] sm:text-[#ede1d0]/90">System Developer | AI Conversation</span> <br className="hidden sm:inline" />
                     <span className="text-[#ffba20] sm:text-[#ede1d0]/90">Specialist</span>
                   </h2>
                 </div>
                 <div className="md:col-span-6 flex items-center">
-                  <p className="font-sans text-[11.5px] xs:text-xs sm:text-base text-[#d5c4ab]/85 leading-relaxed max-w-xl">
+                  <p className="font-sans text-[11px] xs:text-[11.5px] sm:text-base text-[#d5c4ab]/85 leading-relaxed max-w-xl">
                     Building intelligent systems, optimizing AI conversations, and developing digital experiences that combine technology, functionality, and creativity.
                   </p>
                 </div>
@@ -80,11 +80,11 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-col sm:flex-row flex-wrap gap-2.5 sm:gap-6 items-stretch sm:items-center w-full"
+                className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-6 items-center w-full"
               >
                 <button
                   onClick={() => onNavigate("Work")}
-                  className="group relative overflow-hidden bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] px-6 py-3 xs:px-8 xs:py-3.5 sm:px-10 sm:py-4 rounded transition-all active:scale-95 duration-300 font-display text-[11px] xs:text-xs uppercase tracking-widest font-black flex items-center justify-center gap-3 cursor-pointer"
+                  className="group relative overflow-hidden bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] px-5 py-2.5 xs:px-8 xs:py-3.5 sm:px-10 sm:py-4 rounded transition-all active:scale-95 duration-300 font-display text-[10.5px] xs:text-xs uppercase tracking-widest font-black flex items-center justify-center gap-3 cursor-pointer w-[90%] sm:w-auto"
                 >
                   <span className="relative z-10">View Projects</span>
                   <span className="material-symbols-outlined relative z-10 transition-transform group-hover:translate-x-1 text-sm font-black">
@@ -97,15 +97,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   target="_blank"
                   rel="noreferrer"
                   onClick={downloadResume}
-                  className="group px-4 py-3 xs:px-6 xs:py-3.5 sm:px-8 sm:py-4 border border-[#514532]/70 hover:border-[#ffba20] text-[#ede1d0] rounded font-display text-[11px] xs:text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 transition-colors backdrop-blur-sm hover:bg-[#3b3428]/35 font-bold cursor-pointer"
+                  className="group px-4 py-2.5 xs:px-6 xs:py-3.5 sm:px-8 sm:py-4 border border-[#514532]/70 hover:border-[#ffba20] text-[#ede1d0] rounded font-display text-[10.5px] xs:text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors backdrop-blur-sm hover:bg-[#3b3428]/35 font-bold cursor-pointer w-[90%] sm:w-auto"
                 >
-                  <span className="material-symbols-outlined text-[18px]">download</span>
+                  <span className="material-symbols-outlined text-[16px] sm:text-[18px]">download</span>
                   <span>Download Resume</span>
                 </a>
                 
                 {/* Available status badge */}
-                <div className="flex items-center justify-center sm:justify-start gap-2 px-1 py-1 font-mono text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold text-[#d5c4ab]/70">
-                  <span className="inline-block w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.7)]" />
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 px-1 py-0.5 mt-0.5 sm:mt-0 font-mono text-[8.5px] sm:text-[10px] tracking-wider uppercase font-semibold text-[#d5c4ab]/70 self-center sm:self-auto">
+                  <span className="inline-block w-1.5 sm:w-2.5 h-1.5 sm:h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.7)]" />
                   <span>Available for challenges</span>
                 </div>
               </motion.div>
