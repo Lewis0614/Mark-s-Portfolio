@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import { PROFILE, SPECIALIZATIONS } from "../data";
 import Footer from "./Footer";
@@ -8,6 +9,8 @@ interface HomeViewProps {
 }
 
 export default function HomeView({ onNavigate }: HomeViewProps) {
+  const [activeCardId, setActiveCardId] = useState<string | null>(SPECIALIZATIONS[0]?.id || null);
+
   return (
     <div className="space-y-10 sm:space-y-24 md:space-y-32">
       
@@ -138,35 +141,59 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
         {/* Three highly stylized bento-like panels matching column 1 layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {SPECIALIZATIONS.map((spec) => (
-            <div
-              key={spec.id}
-              className="group relative bg-[#130d05] border border-[#514532]/20 hover:border-[#ffba20]/30 transition-all duration-500 rounded-lg overflow-hidden p-5 xs:p-6 sm:p-10 flex flex-col justify-between min-h-[210px] xs:min-h-[230px] sm:min-h-[360px] cinematic-glow"
-            >
-              {/* Giant faint counter number */}
-              <div className="font-display text-4xl sm:text-6xl text-[#514532]/15 font-black select-none text-right transition-colors duration-500 group-hover:text-[#ffba20]/5 leading-none">
-                {spec.num}
-              </div>
-              
-              <div className="relative z-10 space-y-2.5 sm:space-y-4">
-                <span className="material-symbols-outlined text-[#ffba20] text-[28px] sm:text-[44px] mb-0.5 sm:mb-2 block drop-shadow-[0_0_12px_rgba(255,186,32,0.25)]">
-                  {spec.icon}
-                </span>
-                <h5 className="font-display text-base sm:text-xl font-bold uppercase tracking-wider text-[#ede1d0]">
-                  {spec.title}
-                </h5>
-                <p className="font-sans text-[11px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
-                  {spec.description}
-                </p>
-              </div>
+          {SPECIALIZATIONS.map((spec) => {
+            const isActive = activeCardId === spec.id;
+            return (
+              <div
+                key={spec.id}
+                onClick={() => {
+                  if (window.innerWidth <= 768) {
+                    setActiveCardId(spec.id);
+                  }
+                }}
+                className={`group relative bg-[#130d05] transition-all duration-500 rounded-lg overflow-hidden p-5 xs:p-6 sm:p-10 flex flex-col justify-between min-h-[210px] xs:min-h-[230px] sm:min-h-[360px] cinematic-glow border cursor-pointer ${
+                  isActive
+                    ? "border-[#ffba20]/45 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/25 md:shadow-none md:hover:border-[#ffba20]/30"
+                    : "border-[#514532]/20 hover:border-[#ffba20]/30"
+                }`}
+              >
+                {/* Giant faint counter number */}
+                <div className={`font-display text-4xl sm:text-6xl font-black select-none text-right transition-colors duration-500 leading-none ${
+                  isActive 
+                    ? "text-[#ffba20]/10 md:text-[#514532]/15 md:group-hover:text-[#ffba20]/5" 
+                    : "text-[#514532]/15 group-hover:text-[#ffba20]/5"
+                }`}>
+                  {spec.num}
+                </div>
+                
+                <div className="relative z-10 space-y-2.5 sm:space-y-4">
+                  <span className="material-symbols-outlined text-[#ffba20] text-[28px] sm:text-[44px] mb-0.5 sm:mb-2 block drop-shadow-[0_0_12px_rgba(255,186,32,0.25)]">
+                    {spec.icon}
+                  </span>
+                  <h5 className="font-display text-base sm:text-xl font-bold uppercase tracking-wider text-[#ede1d0]">
+                    {spec.title}
+                  </h5>
+                  <p className="font-sans text-[11px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
+                    {spec.description}
+                  </p>
+                </div>
 
-              {/* Bottom decorative bar */}
-              <div className="h-[2px] w-12 bg-gradient-to-r from-[#ffba20] to-transparent group-hover:w-full transition-all duration-700" />
-              
-              {/* Deep twilight glow overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#ffba20]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            </div>
-          ))}
+                {/* Bottom decorative bar */}
+                <div className={`h-[2px] transition-all duration-700 bg-gradient-to-r from-[#ffba20] to-transparent ${
+                  isActive 
+                    ? "w-full md:w-12 md:group-hover:w-full" 
+                    : "w-12 group-hover:w-full"
+                }`} />
+                
+                {/* Deep twilight glow overlay on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-t from-[#ffba20]/5 via-transparent to-transparent transition-opacity duration-700 pointer-events-none ${
+                  isActive 
+                    ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" 
+                    : "opacity-0 group-hover:opacity-100"
+                }`} />
+              </div>
+            );
+          })}
         </div>
       </section>
 

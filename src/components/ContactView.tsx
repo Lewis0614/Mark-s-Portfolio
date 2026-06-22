@@ -18,6 +18,8 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
   const [showToast, setShowToast] = useState(false);
   const [submittedMessages, setSubmittedMessages] = useState<any[]>([]);
 
+  const [activeActionIdx, setActiveActionIdx] = useState<number | null>(null);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!name || !email || !message) return;
@@ -87,9 +89,20 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               href={PROFILE.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="flex w-full items-center gap-4 group p-4 border border-[#514532]/20 hover:border-[#ffba20] transition-colors rounded hover:bg-[#3b3428]/20"
+              onClick={() => {
+                if (window.innerWidth <= 768) {
+                  setActiveActionIdx(0);
+                }
+              }}
+              className={`flex w-full items-center gap-4 group p-4 border transition-colors rounded ${
+                activeActionIdx === 0
+                  ? "border-[#ffba20] bg-[#3b3428]/30 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/20 md:bg-transparent md:shadow-none md:hover:border-[#ffba20] md:hover:bg-[#3b3428]/20"
+                  : "border-[#514532]/20 hover:border-[#ffba20] hover:bg-[#3b3428]/20"
+              }`}
             >
-              <span className="material-symbols-outlined text-[#ffba20] text-xl group-hover:scale-110 transition-transform">
+              <span className={`material-symbols-outlined text-[#ffba20] text-xl transition-transform ${
+                activeActionIdx === 0 ? "scale-115 md:scale-100 md:group-hover:scale-110" : "group-hover:scale-110"
+              }`}>
                 group
                </span>
               <span className="break-words">LinkedIn Outline Portfolio</span>
@@ -97,9 +110,20 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
 
             <a
               href={`mailto:${PROFILE.email}`}
-              className="flex w-full items-center gap-4 group p-4 border border-[#514532]/20 hover:border-[#ffba20] transition-colors rounded hover:bg-[#3b3428]/20"
+              onClick={() => {
+                if (window.innerWidth <= 768) {
+                  setActiveActionIdx(1);
+                }
+              }}
+              className={`flex w-full items-center gap-4 group p-4 border transition-colors rounded ${
+                activeActionIdx === 1
+                  ? "border-[#ffba20] bg-[#3b3428]/30 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/20 md:bg-transparent md:shadow-none md:hover:border-[#ffba20] md:hover:bg-[#3b3428]/20"
+                  : "border-[#514532]/20 hover:border-[#ffba20] hover:bg-[#3b3428]/20"
+              }`}
             >
-              <span className="material-symbols-outlined text-[#ffba20] text-xl group-hover:scale-110 transition-transform">
+              <span className={`material-symbols-outlined text-[#ffba20] text-xl transition-transform ${
+                activeActionIdx === 1 ? "scale-115 md:scale-100 md:group-hover:scale-110" : "group-hover:scale-110"
+              }`}>
                 mail
               </span>
               <span className="break-words">Send Direct Email</span>
@@ -110,10 +134,21 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               download="Jhay_Mark_Ortiz_Luis_Resume.pdf"
               target="_blank"
               rel="noreferrer"
-              onClick={downloadResume}
-              className="flex w-full text-left items-center gap-4 group p-4 border border-[#514532]/20 hover:border-[#ffba20] transition-colors rounded hover:bg-[#3b3428]/20 cursor-pointer text-[#ede1d0]/90"
+              onClick={(e) => {
+                downloadResume();
+                if (window.innerWidth <= 768) {
+                  setActiveActionIdx(2);
+                }
+              }}
+              className={`flex w-full text-left items-center gap-4 group p-4 border transition-colors rounded cursor-pointer text-[#ede1d0]/90 ${
+                activeActionIdx === 2
+                  ? "border-[#ffba20] bg-[#3b3428]/30 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/20 md:bg-transparent md:shadow-none md:hover:border-[#ffba20] md:hover:bg-[#3b3428]/20"
+                  : "border-[#514532]/20 hover:border-[#ffba20] hover:bg-[#3b3428]/20"
+              }`}
             >
-              <span className="material-symbols-outlined text-[#ffba20] text-xl group-hover:scale-110 transition-transform">
+              <span className={`material-symbols-outlined text-[#ffba20] text-xl transition-transform ${
+                activeActionIdx === 2 ? "scale-115 md:scale-100 md:group-hover:scale-110" : "group-hover:scale-110"
+              }`}>
                 download
               </span>
               <span className="break-words">Download PDF Resume</span>

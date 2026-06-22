@@ -25,6 +25,11 @@ interface StoryViewProps {
 
 export default function StoryView({ onNavigate }: StoryViewProps) {
   const [profileImgSrc, setProfileImgSrc] = useState<string>(PROFILE.profileImage);
+  const [activeBuildCard, setActiveBuildCard] = useState<number>(0);
+  const [activeMindsetCard, setActiveMindsetCard] = useState<number>(0);
+  const [activeExperienceCard, setActiveExperienceCard] = useState<string>("exp-1");
+  const [activeLeadershipCard, setActiveLeadershipCard] = useState<number>(0);
+  const [activeStatCard, setActiveStatCard] = useState<number>(0);
 
   return (
     <div className="space-y-10 sm:space-y-24 md:space-y-32">
@@ -124,9 +129,22 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* AI & Conversational Systems Card - Styled with nice SVG waves */}
-            <div className="group relative bg-[#130d05] border border-[#514532]/25 rounded-lg p-6 sm:p-10 min-h-[285px] sm:min-h-[320px] flex flex-col justify-between overflow-hidden cinematic-glow hover:border-[#ffba20]/30 transition-all duration-500">
+            <div
+              onClick={() => {
+                if (window.innerWidth <= 768) {
+                  setActiveBuildCard(0);
+                }
+              }}
+              className={`group relative bg-[#130d05] rounded-lg p-6 sm:p-10 min-h-[285px] sm:min-h-[320px] flex flex-col justify-between overflow-hidden cinematic-glow border cursor-pointer transition-all duration-500 ${
+                activeBuildCard === 0
+                  ? "border-[#ffba20]/50 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/25 md:shadow-none md:hover:border-[#ffba20]/30"
+                  : "border-[#514532]/25 hover:border-[#ffba20]/30"
+              }`}
+            >
               {/* Background Network Mesh / Waves SVG */}
-              <div className="absolute inset-x-0 bottom-0 top-1/3 opacity-15 group-hover:opacity-25 transition-opacity duration-700 pointer-events-none z-0">
+              <div className={`absolute inset-x-0 bottom-0 top-1/3 transition-opacity duration-700 pointer-events-none z-0 ${
+                activeBuildCard === 0 ? "opacity-25 md:opacity-15 md:group-hover:opacity-25" : "opacity-15 group-hover:opacity-25"
+              }`}>
                 <svg className="w-full h-full" viewBox="0 0 400 200" fill="none">
                   <path d="M0,100 C100,120 120,40 200,100 C280,160 300,50 400,90 L400,200 L0,200 Z" fill="url(#grad)" />
                   <path d="M0,130 C80,80 150,150 220,90 C290,30 350,120 400,140" stroke="#ffba20" strokeWidth="1" strokeDasharray="3 3" />
@@ -161,8 +179,21 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             </div>
 
             {/* Software Development Card */}
-            <div className="group relative bg-[#130d05] border border-[#514532]/25 rounded-lg p-6 sm:p-10 min-h-[285px] sm:min-h-[320px] flex flex-col justify-between overflow-hidden cinematic-glow hover:border-[#ffba20]/30 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#ffba20]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            <div
+              onClick={() => {
+                if (window.innerWidth <= 768) {
+                  setActiveBuildCard(1);
+                }
+              }}
+              className={`group relative bg-[#130d05] rounded-lg p-6 sm:p-10 min-h-[285px] sm:min-h-[320px] flex flex-col justify-between overflow-hidden cinematic-glow border cursor-pointer transition-all duration-500 ${
+                activeBuildCard === 1
+                  ? "border-[#ffba20]/50 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/25 md:shadow-none md:hover:border-[#ffba20]/30"
+                  : "border-[#514532]/25 hover:border-[#ffba20]/30"
+              }`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-tr from-[#ffba20]/5 via-transparent to-transparent transition-opacity duration-700 pointer-events-none ${
+                activeBuildCard === 1 ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+              }`} />
               
               <div className="relative z-10 space-y-4">
                 <div className="flex justify-between items-start">
@@ -203,7 +234,18 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
-          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveMindsetCard(0);
+              }
+            }}
+            className={`space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 p-4 xs:p-5 sm:p-6 rounded transition-all cursor-pointer border ${
+              activeMindsetCard === 0
+                ? "border-[#ffba20]/45 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/15 md:shadow-none md:hover:border-[#ffba20]/20"
+                : "border-[#514532]/15 hover:border-[#ffba20]/20"
+            }`}
+          >
             <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">account_tree</span>
             <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Systems Thinking</h4>
             <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
@@ -211,7 +253,18 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             </p>
           </div>
           
-          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveMindsetCard(1);
+              }
+            }}
+            className={`space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 p-4 xs:p-5 sm:p-6 rounded transition-all cursor-pointer border ${
+              activeMindsetCard === 1
+                ? "border-[#ffba20]/45 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/15 md:shadow-none md:hover:border-[#ffba20]/20"
+                : "border-[#514532]/15 hover:border-[#ffba20]/20"
+            }`}
+          >
             <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">troubleshoot</span>
             <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Problem Analysis</h4>
             <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
@@ -219,7 +272,18 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             </p>
           </div>
 
-          <div className="space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 border border-[#514532]/15 p-4 xs:p-5 sm:p-6 rounded hover:border-[#ffba20]/20 transition-colors">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveMindsetCard(2);
+              }
+            }}
+            className={`space-y-1.5 xs:space-y-2 sm:space-y-3 bg-[#130d05]/30 p-4 xs:p-5 sm:p-6 rounded transition-all cursor-pointer border ${
+              activeMindsetCard === 2
+                ? "border-[#ffba20]/45 shadow-[0_0_12px_rgba(255,186,32,0.15)] md:border-[#514532]/15 md:shadow-none md:hover:border-[#ffba20]/20"
+                : "border-[#514532]/15 hover:border-[#ffba20]/20"
+            }`}
+          >
             <span className="material-symbols-outlined text-[#ffba20] text-2xl sm:text-3xl">network_check</span>
             <h4 className="font-display text-base sm:text-lg font-bold uppercase tracking-wider text-[#ede1d0]">Optimization</h4>
             <p className="font-sans text-[11.5px] xs:text-xs sm:text-sm text-[#d5c4ab]/70 leading-relaxed">
@@ -263,10 +327,22 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
               ? ["AI OPS", "PRODUCT DELIVERY", "TECHNICAL QA"]
               : ["CMS", "IT SUPPORT", "WORKFLOW OPTIMIZATION"];
 
+            const isCurrentActive = activeExperienceCard === exp.id;
+
             return (
-              <div key={exp.id} className="relative group space-y-3 lg:space-y-4 w-full">
+              <div
+                key={exp.id}
+                onClick={() => {
+                  if (window.innerWidth <= 768) {
+                    setActiveExperienceCard(exp.id);
+                  }
+                }}
+                className="relative group space-y-3 lg:space-y-4 w-full cursor-pointer"
+              >
                 {/* Timeline yellow glowing indicator node */}
-                <div className="absolute -left-[31px] sm:-left-[47px] lg:-left-[53px] top-1.5 lg:top-[53px] w-2.5 h-2.5 bg-[#ffba20] rounded-full ring-[5px] ring-[#ffba20]/15 shadow-[0_0_12px_rgba(255,184,0,0.85)] group-hover:scale-125 transition-all duration-300 pointer-events-none" />
+                <div className={`absolute -left-[31px] sm:-left-[47px] lg:-left-[53px] top-1.5 lg:top-[53px] w-2.5 h-2.5 bg-[#ffba20] rounded-full ring-[5px] ring-[#ffba20]/15 shadow-[0_0_12px_rgba(255,184,0,0.85)] transition-all duration-300 pointer-events-none ${
+                  isCurrentActive ? "scale-125 md:scale-100 md:group-hover:scale-125" : "group-hover:scale-100 md:group-hover:scale-125"
+                }`} />
                 
                 {/* Period/Year - Large and clear above the card */}
                 <div className="font-mono text-xs sm:text-sm lg:text-base text-[#ffba20] uppercase tracking-[0.2em] font-bold">
@@ -274,7 +350,11 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                 </div>
 
                 {/* Timeline entry card */}
-                <div className="w-full bg-[#130d05]/30 border border-[#514532]/15 hover:border-[#ffba20]/30 hover:bg-[#130d05]/50 rounded-2xl p-5 sm:p-8 transition-all duration-500 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 lg:hover:bg-transparent">
+                <div className={`w-full bg-[#130d05]/30 border rounded-2xl p-5 sm:p-8 transition-all duration-500 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 lg:hover:bg-transparent ${
+                  isCurrentActive
+                    ? "border-[#ffba20]/45 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/15 md:shadow-[0_4px_30px_rgba(0,0,0,0.4)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
+                    : "border-[#514532]/15 hover:border-[#ffba20]/30 hover:bg-[#130d05]/50"
+                }`}>
                   {/* Header info */}
                   <div className="space-y-2 lg:space-y-3">
                     <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-[28px] xl:text-[32px] font-black text-[#f1e5d1] tracking-tight uppercase leading-snug lg:leading-tight break-words">
@@ -335,11 +415,33 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
               
               {/* Highlight statistics badges as seen on screenshots */}
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                <div className="px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-lg sm:rounded-xl backdrop-blur-md">
+                <div
+                  onClick={() => {
+                    if (window.innerWidth <= 768) {
+                      setActiveStatCard(0);
+                    }
+                  }}
+                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all ${
+                    activeStatCard === 0
+                      ? "border-[#ffba20]/50 shadow-[0_0_10px_rgba(255,186,32,0.2)] md:border-[#ffba20]/15"
+                      : "border-[#ffba20]/15"
+                  }`}
+                >
                   <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">30+</span>
                   <span className="font-mono text-[6.5px] xs:text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Performers</span>
                 </div>
-                <div className="px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border border-[#ffba20]/15 rounded-lg sm:rounded-xl backdrop-blur-md">
+                <div
+                  onClick={() => {
+                    if (window.innerWidth <= 768) {
+                      setActiveStatCard(1);
+                    }
+                  }}
+                  className={`px-2.5 py-1.5 sm:px-4 sm:py-3 bg-[#130d05]/75 border rounded-lg sm:rounded-xl backdrop-blur-md cursor-pointer transition-all ${
+                    activeStatCard === 1
+                      ? "border-[#ffba20]/50 shadow-[0_0_10px_rgba(255,186,32,0.2)] md:border-[#ffba20]/15"
+                      : "border-[#ffba20]/15"
+                  }`}
+                >
                   <span className="font-display text-sm xs:text-base sm:text-2xl font-black text-[#ffba20] block leading-none mb-0.5 sm:mb-1">5+</span>
                   <span className="font-mono text-[6.5px] xs:text-[7.5px] sm:text-[8px] uppercase tracking-wider text-[#d5c4ab]/50 font-bold block">Years Active</span>
                 </div>
@@ -367,6 +469,48 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             <p>
               This valuable role developed my system alignment capability, equipping me to organize resources and resolve complex logistics safely and efficiently under active event constraints.
             </p>
+          </div>
+
+          {/* Core Leadership Events - PUP Arts Olympiad & Grand Intramural Parade */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-6 border-t border-[#514532]/10">
+            {FAO_EVENTS.map((evt, idx) => {
+              const isLeadershipActive = activeLeadershipCard === idx;
+              return (
+                <div
+                  key={evt.name}
+                  onClick={() => {
+                    if (window.innerWidth <= 768) {
+                      setActiveLeadershipCard(idx);
+                    }
+                  }}
+                  className={`group relative bg-[#130d05]/30 border transition-all duration-500 rounded-xl p-5 cinematic-glow cursor-pointer ${
+                    isLeadershipActive
+                      ? "border-[#ffba20]/50 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/20 md:shadow-none md:hover:border-[#ffba20]/35 md:hover:shadow-[0_0_15px_rgba(255,186,32,0.15)]"
+                      : "border-[#514532]/20 hover:border-[#ffba20]/35 hover:shadow-[0_0_15px_rgba(255,186,32,0.15)]"
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-start">
+                      <span className="material-symbols-outlined text-[#ffba20] text-xl">
+                        {idx === 0 ? "emoji_events" : "alt_route"}
+                      </span>
+                      <span className="font-mono text-[8px] text-[#ffba20] bg-[#ffba20]/10 border border-[#ffba20]/20 px-2 py-0.5 rounded font-black uppercase tracking-wider">
+                        {evt.stat}
+                      </span>
+                    </div>
+                    <h4 className="font-display text-sm font-black uppercase text-[#ede1d0] tracking-wider leading-snug">
+                      {evt.name}
+                    </h4>
+                    <p className="font-mono text-[8px] text-[#ffba20]/80 uppercase tracking-widest font-semibold">
+                      {evt.role}
+                    </p>
+                    <p className="font-sans text-[11px] text-[#d5c4ab]/70 leading-relaxed pt-1">
+                      {evt.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

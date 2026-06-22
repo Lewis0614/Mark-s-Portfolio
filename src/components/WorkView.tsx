@@ -26,6 +26,9 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
   const [calcDisplay, setCalcDisplay] = useState("0");
   const [calcBase, setCalcBase] = useState<"DEC" | "BIN" | "HEX">("DEC");
 
+  const [activeProjectCard, setActiveProjectCard] = useState<number>(0);
+  const [activeUtilityCard, setActiveUtilityCard] = useState<number>(0);
+
   const docContents: { [key: string]: { code: string; title: string; tech: string } } = {
     doc1: { code: "PUP-REG-2026-X9", title: "PUP Enrollment Grid Registry", tech: "NodeJS + PostgreSQL" },
     doc2: { code: "AI-VOICE-RUDDER-7", title: "AI Speech Integration Blueprint", tech: "Python/TensorFlow" },
@@ -146,17 +149,30 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
       </section>
 
       {/* Project 1: Integrated Filing System */}
-      <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
+      <section
+        onClick={() => {
+          if (window.innerWidth <= 768) {
+            setActiveProjectCard(0);
+          }
+        }}
+        className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center cursor-pointer"
+      >
         {/* Project Image Left */}
         <div className="w-full lg:col-span-7 relative group order-2 lg:order-1">
-          <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <div className="relative overflow-hidden rounded-2xl border border-[#514532]/25 shadow-2xl bg-[#130d05] h-auto sm:aspect-[16/10]">
+          <div className={`absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl transition-opacity duration-700 pointer-events-none ${
+            activeProjectCard === 0 ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`} />
+          <div className={`relative overflow-hidden rounded-2xl border shadow-2xl bg-[#130d05] h-auto sm:aspect-[16/10] transition-colors duration-500 ${
+            activeProjectCard === 0 ? "border-[#ffba20]/55" : "border-[#514532]/25"
+          }`}>
             <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10" />
             <img
               src={PROJECTS[0].image}
               alt={PROJECTS[0].title}
               referrerPolicy="no-referrer"
-              className="w-full h-auto sm:h-full object-contain sm:object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-750 ease-out"
+              className={`w-full h-auto sm:h-full object-contain sm:object-cover transition-all duration-750 ease-out ${
+                activeProjectCard === 0 ? "grayscale-0 contrast-100" : "grayscale contrast-125 md:group-hover:grayscale-0 md:group-hover:contrast-100"
+              }`}
             />
           </div>
         </div>
@@ -217,8 +233,21 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
 
         {/* Twilight Sequencer Player Card Right */}
         <div className="w-full lg:col-span-7 relative group">
-          <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <div className="relative overflow-hidden rounded-lg border border-[#514532]/20 shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full max-w-none">
+          <div className={`absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl transition-opacity duration-700 pointer-events-none ${
+            activeProjectCard === 1 ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`} />
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveProjectCard(1);
+              }
+            }}
+            className={`relative overflow-hidden rounded-lg border shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full max-w-none transition-all duration-500 cursor-pointer ${
+              activeProjectCard === 1
+                ? "border-[#ffba20]/50 shadow-[0_0_20px_rgba(255,186,32,0.25)] md:border-[#514532]/20 md:shadow-none"
+                : "border-[#514532]/20"
+            }`}
+          >
             
             {/* Visual Synthesizer Panel */}
             <div className="bg-[#1f1a11]/90 rounded border border-[#ffba20]/25 p-4 sm:p-5 space-y-4 relative overflow-hidden w-full">
@@ -305,8 +334,21 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
 
         {/* Vector Map Layout Left (Order 2 on Mobile, 1 on Desktop) */}
         <div className="w-full lg:col-span-7 relative group order-2 lg:order-1">
-          <div className="absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <div className="relative overflow-hidden rounded-lg border border-[#514532]/20 shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full">
+          <div className={`absolute -inset-4 bg-[#ffba20]/5 rounded-3xl blur-3xl transition-opacity duration-700 pointer-events-none ${
+            activeProjectCard === 2 ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`} />
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveProjectCard(2);
+              }
+            }}
+            className={`relative overflow-hidden rounded-lg border shadow-2xl bg-[#130d05] p-4 sm:p-8 space-y-4 sm:space-y-6 cinematic-glow w-full transition-all duration-500 cursor-pointer ${
+              activeProjectCard === 2
+                ? "border-[#ffba20]/50 shadow-[0_0_20px_rgba(255,186,32,0.25)] md:border-[#514532]/20 md:shadow-none"
+                : "border-[#514532]/20"
+            }`}
+          >
             
             {/* Mesh overlay simulation inside mapping block */}
             <div className="relative overflow-hidden rounded border border-[#514532]/25 bg-[#181309] flex flex-col justify-between p-3 sm:p-4 gap-4 aspect-auto min-h-[460px] xs:min-h-[420px] sm:min-h-0 sm:aspect-video w-full">
@@ -386,7 +428,18 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Advanced Calculator Card */}
-          <div className="group relative bg-[#130d05] border border-[#514532]/20 hover:border-[#ffba20]/30 transition-all duration-500 rounded p-6 sm:p-10 flex flex-col justify-between overflow-hidden cinematic-glow min-h-[380px] sm:min-h-[460px]">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveUtilityCard(0);
+              }
+            }}
+            className={`group relative bg-[#130d05] transition-all duration-500 rounded p-6 sm:p-10 flex flex-col justify-between overflow-hidden cinematic-glow min-h-[380px] sm:min-h-[460px] border cursor-pointer ${
+              activeUtilityCard === 0
+                ? "border-[#ffba20]/45 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/20 md:shadow-none md:hover:border-[#ffba20]/30"
+                : "border-[#514532]/20 hover:border-[#ffba20]/30"
+            }`}
+          >
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#ffba20]/5 blur-2xl pointer-events-none" />
             
             <div className="space-y-4">
@@ -454,7 +507,18 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
           </div>
 
           {/* Python Address Book Card */}
-          <div className="group relative bg-[#130d05] border border-[#514532]/20 hover:border-[#ffba20]/30 transition-all duration-500 rounded p-6 sm:p-10 flex flex-col justify-between overflow-hidden cinematic-glow min-h-[380px] sm:min-h-[460px]">
+          <div
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                setActiveUtilityCard(1);
+              }
+            }}
+            className={`group relative bg-[#130d05] transition-all duration-500 rounded p-6 sm:p-10 flex flex-col justify-between overflow-hidden cinematic-glow min-h-[380px] sm:min-h-[460px] border cursor-pointer ${
+              activeUtilityCard === 1
+                ? "border-[#ffba20]/45 shadow-[0_0_15px_rgba(255,186,32,0.2)] md:border-[#514532]/20 md:shadow-none md:hover:border-[#ffba20]/30"
+                : "border-[#514532]/20 hover:border-[#ffba20]/30"
+            }`}
+          >
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#ffba20]/5 blur-2xl pointer-events-none" />
             
             <div className="space-y-4">
