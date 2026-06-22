@@ -80,11 +80,11 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-6 items-center w-full"
+                className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 items-stretch sm:items-center w-[92%] xs:w-[90%] sm:w-full mx-auto sm:mx-0"
               >
                 <button
                   onClick={() => onNavigate("Work")}
-                  className="group relative overflow-hidden bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] px-5 py-2.5 xs:px-8 xs:py-3.5 sm:px-10 sm:py-4 rounded transition-all active:scale-95 duration-300 font-display text-[10.5px] xs:text-xs uppercase tracking-widest font-black flex items-center justify-center gap-3 cursor-pointer w-[90%] sm:w-auto"
+                  className="group relative overflow-hidden bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] px-5 py-3.5 xs:px-8 xs:py-4 sm:px-10 sm:py-4 rounded-lg sm:rounded transition-all active:scale-95 duration-300 font-display text-[11px] xs:text-xs uppercase tracking-widest font-black flex items-center justify-center gap-3 cursor-pointer"
                 >
                   <span className="relative z-10">View Projects</span>
                   <span className="material-symbols-outlined relative z-10 transition-transform group-hover:translate-x-1 text-sm font-black">
@@ -97,14 +97,14 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   target="_blank"
                   rel="noreferrer"
                   onClick={downloadResume}
-                  className="group px-4 py-2.5 xs:px-6 xs:py-3.5 sm:px-8 sm:py-4 border border-[#514532]/70 hover:border-[#ffba20] text-[#ede1d0] rounded font-display text-[10.5px] xs:text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors backdrop-blur-sm hover:bg-[#3b3428]/35 font-bold cursor-pointer w-[90%] sm:w-auto"
+                  className="group px-4 py-3 xs:px-6 xs:py-4 sm:px-8 sm:py-4 border border-[#514532]/70 hover:border-[#ffba20] text-[#ede1d0] rounded-lg sm:rounded font-display text-[11px] xs:text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 transition-colors backdrop-blur-sm hover:bg-[#3b3428]/35 font-bold cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[16px] sm:text-[18px]">download</span>
                   <span>Download Resume</span>
                 </a>
                 
                 {/* Available status badge */}
-                <div className="flex items-center justify-center sm:justify-start gap-1.5 px-1 py-0.5 mt-0.5 sm:mt-0 font-mono text-[8.5px] sm:text-[10px] tracking-wider uppercase font-semibold text-[#d5c4ab]/70 self-center sm:self-auto">
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 px-3 py-1.5 sm:px-1.5 sm:py-0.5 mt-2 sm:mt-0 border border-[#514532]/40 sm:border-none rounded-full sm:rounded-none bg-[#130d05]/60 sm:bg-transparent font-mono text-[8.5px] sm:text-[10px] tracking-wider uppercase font-semibold text-[#d5c4ab]/70 self-center sm:self-auto">
                   <span className="inline-block w-1.5 sm:w-2.5 h-1.5 sm:h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.7)]" />
                   <span>Available for challenges</span>
                 </div>
