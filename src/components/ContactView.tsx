@@ -15,31 +15,96 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
   const [message, setMessage] = useState("");
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sendStep, setSendStep] = useState(0); // 0: idle, 1: establishing, 2: encrypting, 3: transmitting
   const [showToast, setShowToast] = useState(false);
   const [submittedMessages, setSubmittedMessages] = useState<any[]>([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [validationErrors, setValidationErrors] = useState<{ name?: string; email?: string; message?: string }>({});
 
   const [activeActionIdx, setActiveActionIdx] = useState<number | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const validateForm = () => {
+    const errors: { name?: string; email?: string; message?: string } = {};
+    if (!name.trim()) {
+      errors.name = "Your Signature Name is required.";
+    } else if (name.trim().length < 2) {
+      errors.name = "Signature Name must be at least 2 characters.";
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      errors.email = "E-Mail Pipeline Address is required.";
+    } else if (!emailPattern.test(email.trim())) {
+      errors.email = "Please enter a valid e-mail address.";
+    }
+
+    if (!message.trim()) {
+      errors.message = "Encoded Message Payload is required.";
+    } else if (message.trim().length < 10) {
+      errors.message = "Message payload must be at least 10 characters.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
-    
-    setTimeout(() => {
-      const newSubmission = { name, email, subject, message, date: new Date().toLocaleTimeString() };
-      setSubmittedMessages((prev) => [newSubmission, ...prev]);
-      
-      setName("");
-      setEmail("");
-      setMessage("");
+    setIsError(false);
+    setErrorMessage("");
+    setSendStep(1);
+
+    const stepIntervals: NodeJS.Timeout[] = [];
+    stepIntervals.push(setTimeout(() => setSendStep(2), 600));
+    stepIntervals.push(setTimeout(() => setSendStep(3), 1200));
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          subject,
+          message: message.trim(),
+        }),
+      });
+
+      const result = await response.json();
+
+      // Ensure that our neat security sequencing completes gracefully
+      await new Promise((resolve) => setTimeout(resolve, 1800));
+      stepIntervals.forEach((t) => clearTimeout(t));
+
+      if (response.ok && result.status === "success") {
+        setIsSuccess(true);
+        const newSubmission = {
+          name: name.trim(),
+          email: email.trim(),
+          subject,
+          message: message.trim(),
+          date: new Date().toLocaleTimeString(),
+        };
+        setSubmittedMessages((prev) => [newSubmission, ...prev]);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 5000);
+      } else {
+        setIsError(true);
+        setErrorMessage(result.error || "Unable to establish secure delivery.");
+      }
+    } catch (err: any) {
+      stepIntervals.forEach((t) => clearTimeout(t));
+      setIsError(true);
+      setErrorMessage("Unable to establish secure delivery. Please try again in a moment.");
+    } finally {
       setIsSubmitting(false);
-      setShowToast(true);
-      
-      setTimeout(() => {
-        setShowToast(false);
-      }, 5000);
-    }, 1200);
+      setSendStep(0);
+    }
   };
 
   return (
@@ -167,6 +232,32 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
             </p>
           </div>
 
+          {/* Success Banner */}
+          {isSuccess && (
+            <div className="bg-green-500/5 border border-green-500/30 p-5 rounded-lg space-y-2 mb-2 animate-fadeIn">
+              <div className="flex items-center gap-2 text-green-500 font-bold font-display text-xs sm:text-sm">
+                <span className="material-symbols-outlined text-base sm:text-md">check_circle</span>
+                <span className="tracking-widest">TRANSMISSION RECEIVED</span>
+              </div>
+              <p className="text-xs text-[#ede1d0]/90 leading-relaxed font-sans">
+                Your message has been successfully delivered to Jhay Mark&apos;s direct email. He will review your inquiry and respond within 24 hours.
+              </p>
+            </div>
+          )}
+
+          {/* Error Banner */}
+          {isError && (
+            <div className="bg-red-500/5 border border-red-500/30 p-5 rounded-lg space-y-2 mb-2 animate-fadeIn">
+              <div className="flex items-center gap-2 text-red-500 font-bold font-display text-xs sm:text-sm">
+                <span className="material-symbols-outlined text-base sm:text-md">report</span>
+                <span className="tracking-widest">TRANSMISSION FAILED</span>
+              </div>
+              <p className="text-xs text-[#ede1d0]/90 leading-relaxed font-sans">
+                {errorMessage || "Unable to establish secure delivery. Please try again in a moment."}
+              </p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block font-mono text-[9px] text-[#ffba20]/60 uppercase tracking-widest font-bold mb-1.5">
@@ -175,11 +266,26 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               <input
                 type="text"
                 required
+                disabled={isSubmitting || isSuccess}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (validationErrors.name) {
+                    setValidationErrors((prev) => ({ ...prev, name: undefined }));
+                  }
+                }}
                 placeholder="e.g. Director Jane Santos"
-                className="w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans"
+                className={`w-full bg-[#181309] border text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:ring-1 outline-none text-xs font-sans transition-colors ${
+                  validationErrors.name
+                    ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
+                    : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
+                } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
               />
+              {validationErrors.name && (
+                <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">
+                  <span>▲</span> {validationErrors.name}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -190,11 +296,26 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                 <input
                   type="email"
                   required
+                  disabled={isSubmitting || isSuccess}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (validationErrors.email) {
+                      setValidationErrors((prev) => ({ ...prev, email: undefined }));
+                    }
+                  }}
                   placeholder="e.g. jane@organization.com"
-                  className="w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans"
+                  className={`w-full bg-[#181309] border text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:ring-1 outline-none text-xs font-sans transition-colors ${
+                    validationErrors.email
+                      ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
+                      : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
+                  } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
                 />
+                {validationErrors.email && (
+                  <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">
+                    <span>▲</span> {validationErrors.email}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -202,9 +323,12 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
                   Collaboration Subject Domain
                 </label>
                 <select
+                  disabled={isSubmitting || isSuccess}
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans cursor-pointer h-[46px]"
+                  className={`w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans cursor-pointer h-[46px] ${
+                    isSuccess ? "opacity-75 cursor-not-allowed" : ""
+                  }`}
                 >
                   <option value="General Collaboration">General Collaboration</option>
                   <option value="Project Hiring Request">Project Hiring Request</option>
@@ -221,31 +345,61 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
               </label>
               <textarea
                 required
+                disabled={isSubmitting || isSuccess}
                 rows={5}
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  if (validationErrors.message) {
+                    setValidationErrors((prev) => ({ ...prev, message: undefined }));
+                  }
+                }}
                 placeholder="Type your strategic collaboration requirements here..."
-                className="w-full bg-[#181309] border border-[#514532]/50 text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:border-[#ffba20] focus:ring-1 focus:ring-[#ffba20] outline-none text-xs font-sans resize-none min-h-[140px] sm:min-h-0"
+                className={`w-full bg-[#181309] border text-[#ede1d0] rounded px-4 py-3 placeholder-[#d5c4ab]/25 focus:ring-1 outline-none text-xs font-sans resize-none min-h-[140px] sm:min-h-0 transition-colors ${
+                  validationErrors.message
+                    ? "border-red-500/60 focus:border-red-500 focus:ring-red-500"
+                    : "border-[#514532]/50 focus:border-[#ffba20] focus:ring-[#ffba20]"
+                } ${isSuccess ? "opacity-75 cursor-not-allowed" : ""}`}
               />
+              {validationErrors.message && (
+                <p className="text-[10px] text-red-400 font-mono mt-1 font-semibold flex items-center gap-1">
+                  <span>▲</span> {validationErrors.message}
+                </p>
+              )}
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting || !name || !email || !message}
-              className="w-full bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] disabled:bg-[#3b3428] disabled:text-[#d5c4ab]/40 rounded py-4 flex items-center justify-center gap-3 transition-colors font-display text-xs uppercase tracking-widest font-bold cursor-pointer transition-transform duration-200 active:scale-[0.98]"
-            >
-              {isSubmitting ? (
-                <>
-                  <span className="material-symbols-outlined text-sm animate-spin">sync</span>
-                  <span className="font-extrabold">TRANSMITTING COORDINATES</span>
-                </>
-              ) : (
-                <>
-                  <span className="material-symbols-outlined text-sm">send</span>
-                  <span className="font-extrabold">Start the Conversation</span>
-                </>
-              )}
-            </button>
+            {isSuccess ? (
+              <button
+                type="button"
+                disabled
+                className="w-full bg-[#1c2e17] border border-green-500/40 text-green-400 rounded py-4 flex items-center justify-center gap-3 font-display text-xs uppercase tracking-widest font-bold transition-all duration-300"
+              >
+                <span className="material-symbols-outlined text-sm">check_circle</span>
+                <span className="font-extrabold">✓ MESSAGE DELIVERED</span>
+              </button>
+            ) : isSubmitting ? (
+              <button
+                type="button"
+                disabled
+                className="w-full bg-[#ffba20]/10 border border-[#ffba20]/30 text-[#ffba20]/80 rounded py-4 flex items-center justify-center gap-3 font-display text-xs uppercase tracking-widest font-semibold"
+              >
+                <span className="material-symbols-outlined text-sm animate-spin">sync</span>
+                <span className="font-extrabold">
+                  {sendStep === 1 && "ESTABLISHING SECURE CHANNEL..."}
+                  {sendStep === 2 && "ENCRYPTING PAYLOAD..."}
+                  {sendStep === 3 && "TRANSMITTING MESSAGE..."}
+                  {sendStep === 0 && "TRANSMITTING COORDINATES..."}
+                </span>
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="w-full bg-[#ffba20] hover:bg-[#ffdca1] text-[#181309] rounded py-4 flex items-center justify-center gap-3 transition-colors font-display text-xs uppercase tracking-widest font-bold cursor-pointer transition-transform duration-200 active:scale-[0.98]"
+              >
+                <span className="material-symbols-outlined text-sm">send</span>
+                <span className="font-extrabold">Start the Conversation</span>
+              </button>
+            )}
           </form>
 
           {/* Submitted Message Outbox Logs */}

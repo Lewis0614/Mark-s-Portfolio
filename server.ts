@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
+import { Resend } from "resend";
 
 dotenv.config();
 
@@ -176,6 +177,94 @@ I look forward to connecting with you.
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     res.status(500).json({ error: error.message || "An error occurred with Gemini." });
+  }
+});
+
+// Secure contact submission route utilizing Resend
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+
+    // Validate inputs
+    if (!name || typeof name !== "string" || !name.trim()) {
+      return res.status(400).json({ status: "error", error: "Your signature name is required." });
+    }
+    const emailStr = typeof email === "string" ? email.trim() : "";
+    if (!emailStr || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr)) {
+      return res.status(400).json({ status: "error", error: "A valid email pipeline address is required." });
+    }
+    if (!subject || typeof subject !== "string" || !subject.trim()) {
+      return res.status(400).json({ status: "error", error: "A collaboration subject domain is required." });
+    }
+    if (!message || typeof message !== "string" || !message.trim()) {
+      return res.status(400).json({ status: "error", error: "An encoded message payload is required." });
+    }
+
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("[Resend Config Error] RESEND_API_KEY environment variable is not defined on the server.");
+      return res.status(500).json({
+        status: "error",
+        error: "Email service unconfigured. Please define RESEND_API_KEY in your env settings."
+      });
+    }
+
+    // Lazy initialization of Resend client to avoid module-load crashes if API key is empty
+    const resend = new Resend(apiKey);
+    const destinationEmail = process.env.CONTACT_TO_EMAIL || "jhaymarkortizluis@gmail.com";
+
+    const emailResponse = await resend.emails.send({
+      from: "Portfolio Contact <onboarding@resend.dev>",
+      to: destinationEmail,
+      replyTo: emailStr,
+      subject: `[Portfolio] ${subject}: ${name}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; padding: 20px; background-color: #fafafa; color: #181309;">
+          <h2 style="color: #ffba20; border-bottom: 2px solid #ffba20; padding-bottom: 8px; margin-top: 0;">Secure Transmission Received</h2>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <tr>
+              <td style="padding: 6px 0; font-weight: bold; width: 120px; vertical-align: top;">Name:</td>
+              <td style="padding: 6px 0; color: #333;">${name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Email:</td>
+              <td style="padding: 6px 0; color: #333;"><a href="mailto:${emailStr}">${emailStr}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; font-weight: bold; vertical-align: top;">Subject:</td>
+              <td style="padding: 6px 0; color: #333;">${subject}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0 6px 0; font-weight: bold; vertical-align: top;" colspan="2">Message:</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; background-color: #fff; border: 1px solid #e1e1e1; border-radius: 6px; white-space: pre-wrap; font-family: sans-serif; font-size: 14px; line-height: 1.5; color: #111;" colspan="2">${message}</td>
+            </tr>
+          </table>
+          <hr style="border: none; border-top: 1px solid #eaeaea; margin: 25px 0 15px 0;">
+          <p style="font-size: 11px; color: #777; margin: 0;">
+            <strong>Timestamp:</strong> ${new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" })} (Manila Time)<br>
+            <strong>Source:</strong> Portfolio Secure Transmission Channel
+          </p>
+        </div>
+      `
+    });
+
+    if (emailResponse.error) {
+      console.error("Resend API returned an error:", emailResponse.error);
+      return res.status(500).json({
+        status: "error",
+        error: `Resend Error: ${emailResponse.error.message || "Unable to send message."}`
+      });
+    }
+
+    res.json({ status: "success", data: emailResponse.data });
+  } catch (error: any) {
+    console.error("Exception in /api/contact route:", error);
+    res.status(500).json({
+      status: "error",
+      error: error.message || "An error occurred with Resend mailer."
+    });
   }
 });
 
