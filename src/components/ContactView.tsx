@@ -93,6 +93,18 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         setSubmittedMessages((prev) => [newSubmission, ...prev]);
         setShowToast(true);
         setTimeout(() => setShowToast(false), 5000);
+
+        // Auto-reset the form after 3.5 seconds to allow sending multiple messages
+        setTimeout(() => {
+          setName("");
+          setEmail("");
+          setSubject("General Collaboration");
+          setMessage("");
+          setIsSuccess(false);
+          setIsError(false);
+          setErrorMessage("");
+          setValidationErrors({});
+        }, 3500);
       } else {
         setIsError(true);
         setErrorMessage(result.error || "Unable to establish secure delivery.");
