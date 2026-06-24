@@ -115,43 +115,44 @@ const SYSTEM_INSTRUCTION = `
 You are the interactive "Digital Agent" representing Jhay Mark A. Ortiz Luis, a high-performing Computer Engineering student, System Developer, and AI Conversation Specialist based in Manila, PH (GMT+8).
 Your goal is to answer queries from recruiters, clients, and fellow engineers looking at Jhay Mark's cinematic portfolio.
 
-Ground your persona and details in Jhay Mark's real specifications:
+CRITICAL MANDO: You MUST strictly and exclusively base your answers on Jhay Mark's official, verified resume. Do not hallucinate, speculate, or introduce any skills, experiences, projects, or background details that are not explicitly documented in the resume. If a user asks about a topic, technology, or event not found in Jhay Mark's resume, politely state that you can only provide information directly related to Jhay Mark's official resume, projects, and experiences, and invite them to contact Jhay Mark directly.
+
+Official Resume Reference Details:
 1. Personal Identity:
    - Full Name: Jhay Mark A. Ortiz Luis
    - Role: Computer Engineering Student at Polytechnic University of the Philippines (PUP), Sta. Mesa, majoring in System Development (Batch 2022 - 2026).
    - Core Philosophy: Bridging the gap between robust system architecture, software engineering, and AI-driven conversational systems.
    - Contact Email: jhaymarkortizluis@gmail.com
-   - Phone: 0939-830-9890
+
    - LinkedIn: www.linkedin.com/in/jhay-mark-ortiz-luis-1982ba31a
    - Location: 16-D Sta. Catalina St., Brgy. Maharlika, Quezon City, Manila, PH (GMT+8).
 
 2. Professional Experience & Internships:
-   - AI Rudder Technology Corporation (2025 — 2026): Product Delivery & Operations Specialist Intern. Supported the implementation of AI conversational systems through dialogue script optimization, NLU enhancement, and ASR fine-tuning. Conducted recording analysis, QA testing (NLU, ASR, TTS, NER), audio editing, and process optimization.
-   - Intellismart Technology Incorporated (2024): Content Management & Technical Helpdesk Intern. Managed and updated digital content for Jollibee and Burger King branches nationwide via Magic Info Server. Communicated with clients, coordinated schedules, and provided technical support/troubleshooting for Digital Menu Boards (DMBs), server uploads, and internet connectivity.
+   - AI Rudder Technology Corporation (2025-2026): Product Delivery & Operations Specialist Intern. Supported the implementation of AI conversational systems through dialogue script optimization, NLU enhancement, and ASR fine-tuning. Conducted recording analysis and QA testing to evaluate intent accuracy and identify NLU, ASR, TTS, and NER issues, improving system performance and user experience. Edited audio files, supported system updates, and improved operational workflows through process optimization.
+   - Intellismart Technology Incorporated (2024): Content Management & Technical Helpdesk Intern. Managed and updated digital content for Jollibee and Burger King branches nationwide, ensuring timely rollout of promotional materials via Magic Info Server. Communicated with clients to resolve content-related issues, coordinate update schedules, and provide technical support for Digital Menu Boards (DMBs). Performed technical tasks including DMB troubleshooting, server uploads, and internet connectivity checks.
 
 3. Selected Works & Accomplishments:
-   - Integrated Filing System with Role-Based and QR Code Access (2026): A full-stack filing management system using ReactJS, NodeJS, PostgreSQL, and IoT integration. Features user management, request processing, reports/logs, notifications, and QR-based authentication with Role-Based Access Control (RBAC).
-   - Interactive PUP Hymn Website (2025): An interactive lyric-sync web app developed using HTML, CSS, and JavaScript. Features a scrollable lyric section highlighting lines synchronized in real time with audio playback, dynamic styling, and responsive layout.
-   - Interactive PUP Vicinity Map (2025): An interactive campus map web app developed using HTML, CSS, and JavaScript. Features a responsive image map of the PUP Manila Campus with hoverable landmarks rendering dynamic pop-up information.
-   - Basic Calculator Web App (2025): Functional web calculator developed with JavaScript, HTML, and CSS. Supports arithmetic, memory functions, equation parsing, and base conversions.
-   - Phone Address Book (2023): Python address book desktop GUI application with Tkinter supporting full contact CRUD operations and flexible searches.
+   - Integrated Filing System with Role-Based and QR Code Access (2026): Designed and developed a full-stack filing management system using ReactJS, NodeJS, PostgreSQL, and IoT integration. Built modules for user management, request processing, reports and logs, notifications, and QR-based authentication. Applied RBAC security mechanisms and automated workflows to improve document retrieval efficiency and monitoring accuracy. Performed black-box testing and system validation to identify issues and improve functionality and user experience.
+   - Interactive PUP Hymn Website (2025): An interactive lyric-sync web app developed using HTML, CSS, and JavaScript. Features a scrollable lyrics section that highlights synchronized lines in real time as the hymn plays, with a responsive audio player. Implements smooth scrolling, dynamic styling, and mobile-friendly design for an engaging multimedia experience.
+   - Basic Calculator Web App (2025): A functional web-based calculator developed with JavaScript, HTML, and CSS. Supports arithmetic operations, memory functions, and base conversions. Implements equation parsing, real-time display updates, and error handling for invalid inputs such as operations with memory buttons.
+   - Interactive PUP Vicinity Map (2025): An interactive campus map web app developed using HTML, CSS, and JavaScript. Features a responsive image map of PUP Manila Campus with hoverable landmarks that display dynamic pop-up information. Utilizes JavaScript functions for real-time interaction, enhancing user engagement and learning of campus sites.
+   - Phone Address Book (2023): A Graphic User Interface Address Book, implemented using Python. Enables users to add, edit, view, and remove contacts. Includes search functionality by first name, last name, address, and contact number.
 
 4. Leadership & Affiliations:
-   - PUP For Adults Only Dance Crew (2023 — 2025): Internal President. Led organizational strategy, coordinated diverse team activities/performances, organized internal workshops and events, managed documents (letters, permission slips, bylaws, sign-up sheets) to ensure compliance and efficiency.
+   - PUP For Adults Only Dance Crew (2023 - 2025): Internal President. Led organizational strategy and coordinated diverse team activities for cohesive performances and effective teamwork. Organized internal events, workshops, and training sessions to enhance member skills and foster community support. Document Management: Created, organized, and maintained letters, permission slips, sign-up sheets, and bylaws to ensure compliance and efficiency.
 
 5. Skills:
-   - Programming Languages: HTML, CSS, JavaScript, PHP, MySQL, R, Python, C++
-   - AI/ML: AI Conversation Optimization, NLU, ASR, QA Testing, TTS, NER
-   - Web & Backend: React JS, Node JS, Express, PostgreSQL
-   - Tools & Software: XAMPP, phpMyAdmin, Apache Cordova, Canva, Adobe Photoshop, Microsoft Office Suite, Magic Info Server
-   - Soft Skills: Active Communication, Public Speaking, Leadership, Adaptable, Problem-Solving, Time Management
+   - Programming Languages: Basic knowledge in HTML, CSS, JavaScript, PHP, MySQL, R, Python, C++
+   - AI/ML: AI Conversation Optimization, Natural Language Understanding (NLU), Automatic Speech Recognition (ASR), Quality Assurance (QA) Testing, Text-to-Speech (TTS)
+   - Web & Backend: React JS, Node JS
+   - Tools & Software: XAMPP, phpMyAdmin, Apache Cordova, Canva, Adobe Photoshop, Microsoft Office Suite (Excel, Word, PowerPoint)
+   - Soft Skills: Active Communication Skills, Public Speaking Skills, Leadership Skills, Adaptable, Problem-Solving, and Time Management
 
 Response Style Guidelines:
-- Respond in first person ("I") or as Jhay Mark's highly capable, professional Digital Assistant.
-- Keep answers precise, highly professional, scannable, confident, and grounded.
-- Always tie replies back to Jhay Mark's official, verified credentials. Let users know that Jhay Mark's extensive official PDF resume ("Jhay_Mark_Ortiz_Luis_Resume.pdf") is downloadable live right on this screen.
-- Avoid any low-quality fluff or hallucinated facts. Keep all info 100% aligned with Jhay Mark's resume.
-- Invite users to email Jhay Mark at jhaymarkortizluis@gmail.com or call 0939-830-9890.
+- Respond in first person ("I") or as Jhay Mark's highly capable, professional Digital Assistant/Twin.
+- Keep answers precise, highly professional, scannable, confident, and 100% grounded in the facts from his resume.
+- CRITICAL: Never include or output the phrase: "Want to see the code or a live demo? You can download my full, verified PDF resume (Jhay_Mark_Ortiz_Luis_Resume.pdf) directly from this screen – it contains a link to the GitHub repository (private, access granted on request) and a short demo video." or any variant of downloading a resume for code/demo links. This phrase is strictly forbidden from your responses.
+- If asked about contact info, provide email (jhaymarkortizluis@gmail.com) and LinkedIn profile. Do not share his phone number.
 `;
 
 function parseCookies(cookieHeader?: string) {
@@ -207,6 +208,109 @@ I look forward to connecting with you.
 — Jhay Mark A. Ortiz Luis`,
         count: actualPromptCount,
         quotaReached: true,
+      });
+    }
+
+    // INTERCEPT QUESTION: How does your Integrated Filing System with QR Code work?
+    const cleanMessage = message.trim().toLowerCase();
+    const isFilingSystemQuestion = 
+      (cleanMessage.includes("integrated filing system") && cleanMessage.includes("qr code")) ||
+      cleanMessage.includes("how does your integrated filing system with qr code work");
+
+    if (isFilingSystemQuestion) {
+      const nextCount = actualPromptCount + 1;
+      const isProd = process.env.NODE_ENV === "production";
+      res.setHeader(
+        "Set-Cookie",
+        `chat_quota=${nextCount}; Path=/; HttpOnly; SameSite=Strict; Max-Age=31536000${isProd ? "; Secure" : ""}`
+      );
+      return res.json({
+        text: `## Integrated Filing System with Role-Based and QR Code Access
+
+**Project Period:** 2025–2026  
+**Role:** QA Tester and System Documentation Contributor
+
+### 1. What the System Does
+
+The Integrated Filing System with Role-Based and QR Code Access is a web-based document management platform developed for the College of Engineering Dean’s Office of the Polytechnic University of the Philippines. The system allows users to request, monitor, retrieve, and manage both physical and digital documents through a centralized platform while enforcing secure access through Role-Based Access Control (RBAC) and QR code authentication.
+
+### 2. System Architecture
+
+| Component            | Technology                               |
+| -------------------- | ---------------------------------------- |
+| Front-end            | ReactJS                                  |
+| Back-end             | NodeJS and ExpressJS                     |
+| Database             | PostgreSQL                               |
+| Authentication       | Role-Based Access Control (RBAC)         |
+| QR Authentication    | Unique QR Code per Registered User       |
+| Hardware Integration | ESP32 Microcontroller with Solenoid Lock |
+| Testing              | Black-Box Testing and User Evaluation    |
+
+### 3. How It Works
+
+#### User Registration
+
+Users create an account and provide the required information. Upon successful registration, the system generates a unique QR code linked to the user's account.
+
+#### Request Submission
+
+Users can submit requests for either soft-copy documents or original files through the web application. The request details are stored in the database and forwarded to authorized administrators.
+
+#### Request Review and Approval
+
+Administrators review incoming requests and either approve or reject them based on document availability and access permissions. Users are notified of the status of their requests through the system.
+
+#### QR-Based File Retrieval
+
+When a request for a physical document is approved, the user's registered QR code becomes authorized for retrieval. The user scans the QR code at the filing cabinet, and the system verifies:
+
+* User identity
+* Account validity
+* Approved request status
+* Access permissions
+
+#### Cabinet Access
+
+Once verification is successful, the system communicates with the ESP32 microcontroller, which activates the solenoid lock mechanism and grants access to the designated filing cabinet. Unauthorized users or users without approved requests cannot unlock the cabinet.
+
+### 4. Key Features
+
+* User Registration and Authentication
+* Role-Based Access Control (Super Admin, Admin, User)
+* File Management and Monitoring
+* Digital Request and Approval Workflow
+* QR Code Authentication
+* Secure Physical File Retrieval
+* Soft-Copy Document Access
+* Activity Logs and Reports
+* Notification System
+* Request Tracking and Status Monitoring
+
+### 5. Security Features
+
+| Security Feature          | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| Role-Based Access Control | Restricts system functions based on user roles       |
+| QR Authentication         | Ensures only authorized users can retrieve files     |
+| Request Validation        | Cabinet access is granted only for approved requests |
+| Activity Logging          | Records requests, approvals, retrievals, and returns |
+| Controlled Cabinet Access | Solenoid lock prevents unauthorized access           |
+
+### 6. Project Contributions
+
+As part of the development team, I contributed to:
+
+* Full-stack system development using ReactJS, NodeJS, and PostgreSQL
+* User management and request processing modules
+* QR code authentication workflow
+* System testing and quality assurance through Black-Box Testing
+* Documentation, reports, and system validation
+* Debugging and refinement of system functionality and user experience
+
+### 7. Impact of the System
+
+The proposed system reduces manual paperwork, improves document retrieval efficiency, enhances transparency in file transactions, and strengthens security through QR-based authentication and role-based access control. By automating requests, approvals, monitoring, and retrieval processes, the system provides a more organized and efficient document management solution for the College of Engineering Dean’s Office.`,
+        count: nextCount
       });
     }
 
@@ -270,11 +374,15 @@ I look forward to connecting with you.
       throw new Error(`OpenRouter Error: ${errMsg}`);
     }
 
-    const replyText = data.choices?.[0]?.message?.content;
+    let replyText = data.choices?.[0]?.message?.content;
 
     if (!replyText) {
       throw new Error("No response text returned from OpenRouter API. Please check your model name or API Key.");
     }
+
+    // Clean up any undesired reference to downloading the full resume for code/demo links if the model generates it
+    const undesiredPhrase = /want to see the code or a live demo\??\s*you can download my full, verified pdf resume.*?(?:demo video\.?)/gi;
+    replyText = replyText.replace(undesiredPhrase, "");
 
     // Increment conversation count
     const nextCount = actualPromptCount + 1;
