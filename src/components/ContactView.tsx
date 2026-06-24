@@ -118,6 +118,13 @@ export default function ContactView({ onNavigate }: ContactViewProps) {
         if (result.error && typeof result.error === "string") {
           const lower = result.error.toLowerCase();
           if (
+            lower.includes("unconfigured") ||
+            lower.includes("api_key") ||
+            lower.includes("resend_api_key") ||
+            lower.includes("environment variable")
+          ) {
+            cleanErr = result.error;
+          } else if (
             !lower.includes("function_invocation_failed") &&
             !lower.includes("internal server error") &&
             !lower.includes("vercel") &&

@@ -10,18 +10,81 @@ const PORT = 3000;
 
 // Safe, serverless-compatible body parser middleware to prevent stream-read hanging
 app.use((req: any, res, next) => {
-  if (req.body && typeof req.body === "object") {
+  // If body is already parsed (e.g. by Vercel or other serverless environment)
+  if (req.body !== undefined) {
+    if (typeof req.body === "string" && req.body.trim()) {
+      try {
+        req.body = JSON.parse(req.body);
+      } catch (_) {
+        // Keep as raw string
+      }
+    }
     return next();
   }
-  if (req.body && typeof req.body === "string") {
-    try {
-      req.body = JSON.parse(req.body);
-      return next();
-    } catch (_) {
-      // Fall through to express.json
-    }
+
+  const methodsWithBody = ["POST", "PUT", "PATCH", "DELETE"];
+  if (!methodsWithBody.includes(req.method)) {
+    return next();
   }
-  express.json()(req, res, next);
+
+  // If content-length is 0 or undefined, there's no body to parse
+  const contentLength = req.headers["content-length"];
+  if (contentLength === "0") {
+    req.body = {};
+    return next();
+  }
+
+  // If the stream is already complete or not readable, don't try to parse
+  if (req.complete || !req.readable) {
+    req.body = {};
+    return next();
+  }
+
+  // Safe custom stream accumulator with a 2-second hard timeout to prevent hanging
+  let data = "";
+  let isDone = false;
+
+  const timeout = setTimeout(() => {
+    if (!isDone) {
+      isDone = true;
+      console.warn("[Body Parser Timeout] Request body reading timed out. Stream might have been pre-consumed.");
+      req.body = {};
+      next();
+    }
+  }, 2000);
+
+  req.on("data", (chunk: any) => {
+    if (!isDone) {
+      data += chunk;
+    }
+  });
+
+  req.on("end", () => {
+    if (!isDone) {
+      isDone = true;
+      clearTimeout(timeout);
+      if (data.trim()) {
+        try {
+          req.body = JSON.parse(data);
+        } catch (_) {
+          req.body = data; // fallback to raw string
+        }
+      } else {
+        req.body = {};
+      }
+      next();
+    }
+  });
+
+  req.on("error", (err: any) => {
+    if (!isDone) {
+      isDone = true;
+      clearTimeout(timeout);
+      console.error("[Body Parser Error] Stream error:", err);
+      req.body = {};
+      next();
+    }
+  });
 });
 
 // Helper for lazy initialization of server-side Gemini API client
