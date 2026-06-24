@@ -210,34 +210,71 @@ I look forward to connecting with you.
       });
     }
 
-    // Prepare contents containing system instruction and conversation context
-    // We can use standard generateContent with a structured chat-like context or standard chat API.
-    // Let's use ai.models.generateContent to have absolute control over formatting and custom inputs
-    const contents: any[] = [];
+    // Prepare message payload for OpenRouter chat completion format
+    const messages: any[] = [
+      {
+        role: "system",
+        content: SYSTEM_INSTRUCTION.trim(),
+      },
+    ];
 
     if (history && history.length > 0) {
       history.forEach((h: any) => {
-        contents.push({
-          role: h.role,
-          parts: [{ text: h.text }],
+        messages.push({
+          role: h.role === "model" ? "assistant" : h.role,
+          content: h.text,
         });
       });
     }
 
-    contents.push({
+    messages.push({
       role: "user",
-      parts: [{ text: message }],
+      content: message,
     });
 
-    const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: contents,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
+    const openRouterKey = process.env.OPENROUTER_API_KEY;
+    if (!openRouterKey) {
+      throw new Error("OPENROUTER_API_KEY is not configured.");
+    }
+    const siteUrl = process.env.APP_URL || "https://ais-dev-cujfylnwqfsqb5kliur3ea-945108707878.asia-east1.run.app";
+    const siteName = "Jhay Mark Portfolio Digital Twin";
+
+    console.log("Calling OpenRouter API with model: openai/gpt-oss-120b:free");
+    const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${openRouterKey}`,
+        "HTTP-Referer": siteUrl,
+        "X-Title": siteName,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-120b:free",
+        messages: messages,
+        temperature: 0.7,
+      }),
     });
+
+    if (!openRouterResponse.ok) {
+      const errorText = await openRouterResponse.text();
+      throw new Error(`OpenRouter API error (${openRouterResponse.status}): ${errorText}`);
+    }
+
+    const data: any = await openRouterResponse.json();
+    console.log("OpenRouter API Raw Response:", JSON.stringify(data, null, 2));
+
+    if (data.error) {
+      const errMsg = typeof data.error === "object" 
+        ? (data.error.message || JSON.stringify(data.error)) 
+        : data.error;
+      throw new Error(`OpenRouter Error: ${errMsg}`);
+    }
+
+    const replyText = data.choices?.[0]?.message?.content;
+
+    if (!replyText) {
+      throw new Error("No response text returned from OpenRouter API. Please check your model name or API Key.");
+    }
 
     // Increment conversation count
     const nextCount = actualPromptCount + 1;
@@ -249,10 +286,10 @@ I look forward to connecting with you.
       `chat_quota=${nextCount}; Path=/; HttpOnly; SameSite=Strict; Max-Age=31536000${isProd ? "; Secure" : ""}`
     );
 
-    res.json({ text: response.text, count: nextCount });
+    res.json({ text: replyText, count: nextCount });
   } catch (error: any) {
-    console.error("Gemini API Error:", error);
-    res.status(500).json({ error: error.message || "An error occurred with Gemini." });
+    console.error("OpenRouter API Error:", error);
+    res.status(500).json({ error: error.message || "An error occurred with OpenRouter API." });
   }
 });
 

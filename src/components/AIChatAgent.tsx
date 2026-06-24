@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
   role: "user" | "model";
@@ -221,13 +223,67 @@ I look forward to connecting with you.
               </span>
             </div>
             <div
-              className={`p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words ${
+              className={`p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm leading-relaxed break-words ${
                 msg.role === "user"
-                  ? "bg-[#30291e] text-[#ede1d0] rounded-tr-none border border-[#514532]/30"
+                  ? "bg-[#30291e] text-[#ede1d0] rounded-tr-none border border-[#514532]/30 whitespace-pre-wrap"
                   : "bg-[#251f14] text-[#d5c4ab] rounded-tl-none border border-[#514532]/20"
               }`}
             >
-              {msg.text}
+              {msg.role === "user" ? (
+                msg.text
+              ) : (
+                <div className="markdown-body text-[#d5c4ab] space-y-2 overflow-x-auto">
+                  <Markdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      h1: ({ node, ...props }) => <h1 className="text-base font-bold text-[#ffdca1] mt-3 mb-1.5" {...props} />,
+                      h2: ({ node, ...props }) => <h2 className="text-sm font-bold text-[#ffdca1] mt-2.5 mb-1" {...props} />,
+                      h3: ({ node, ...props }) => <h3 className="text-xs font-bold text-[#ffdca1] mt-2 mb-1" {...props} />,
+                      p: ({ node, ...props }) => <p className="leading-relaxed mb-2 last:mb-0" {...props} />,
+                      ul: ({ node, ...props }) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
+                      ol: ({ node, ...props }) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                      li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
+                      strong: ({ node, ...props }) => <strong className="font-bold text-[#ffdca1]" {...props} />,
+                      em: ({ node, ...props }) => <em className="italic" {...props} />,
+                      table: ({ node, ...props }) => (
+                        <div className="overflow-x-auto my-4 w-full rounded-lg border border-[#514532]/30">
+                          <table className="w-full text-left border-collapse text-xs sm:text-sm" {...props} />
+                        </div>
+                      ),
+                      thead: ({ node, ...props }) => <thead className="bg-[#181309] text-[#ffdca1] font-semibold border-b border-[#514532]/30" {...props} />,
+                      tbody: ({ node, ...props }) => <tbody className="divide-y divide-[#514532]/20" {...props} />,
+                      tr: ({ node, ...props }) => <tr className="hover:bg-[#181309]/35 odd:bg-[#1f190e]/20 transition-colors" {...props} />,
+                      th: ({ node, ...props }) => <th className="px-3 py-2 text-xs uppercase font-mono tracking-wider border-r last:border-r-0 border-[#514532]/30" {...props} />,
+                      td: ({ node, ...props }) => <td className="px-3 py-2 text-xs text-[#d5c4ab]/90 border-r last:border-r-0 border-[#514532]/25" {...props} />,
+                      a: ({ node, ...props }) => (
+                        <a
+                          className="text-[#ffba20] hover:underline hover:text-[#ffdca1] transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          {...props}
+                        />
+                      ),
+                      code: ({ className, children, ...props }: any) => {
+                        const match = /language-(\w+)/.exec(className || "");
+                        const isInline = !match && typeof children === "string" && !children.includes("\n");
+                        return isInline ? (
+                          <code className="bg-[#181309] text-[#ffba20] px-1.5 py-0.5 rounded font-mono text-xs" {...props}>
+                            {children}
+                          </code>
+                        ) : (
+                          <pre className="bg-[#181309] p-3 rounded-lg border border-[#514532]/30 overflow-x-auto my-2">
+                            <code className="font-mono text-xs block text-[#ede1d0]" {...props}>
+                              {children}
+                            </code>
+                          </pre>
+                        );
+                      },
+                    }}
+                  >
+                    {msg.text}
+                  </Markdown>
+                </div>
+              )}
             </div>
           </div>
         ))}
