@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { EXPERIENCE, PROFILE } from "../data";
 import Footer from "./Footer";
 
@@ -11,8 +11,32 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
   const [activeBuildCard, setActiveBuildCard] = useState<number | null>(null);
   const [activeMindsetCard, setActiveMindsetCard] = useState<number | null>(null);
   const [activeExperienceCard, setActiveExperienceCard] = useState<string>("exp-1");
+  const [touchedNode, setTouchedNode] = useState<string | null>(null);
   const [activeStatCard, setActiveStatCard] = useState<number | null>(null);
   const [isProfileActive, setIsProfileActive] = useState<boolean>(false);
+  const [isDanceCardActive, setIsDanceCardActive] = useState<boolean>(false);
+  const danceCardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      if (danceCardRef.current && !danceCardRef.current.contains(e.target as Node)) {
+        setIsDanceCardActive(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, []);
+
+  const handleTouch = (id: string) => {
+    setTouchedNode(id);
+    setTimeout(() => {
+      setTouchedNode((current) => (current === id ? null : current));
+    }, 400);
+  };
 
   return (
     <div className="space-y-10 sm:space-y-24 md:space-y-32">
@@ -336,18 +360,30 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
             return (
               <div
                 key={exp.id}
+                tabIndex={0}
                 onClick={() => {
                   if (window.innerWidth <= 768) {
                     setActiveExperienceCard(exp.id);
                   }
+                  handleTouch(exp.id);
                 }}
-                className="relative group space-y-3 lg:space-y-4 w-full cursor-pointer focus:outline-none active:outline-none select-none"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (window.innerWidth <= 768) {
+                      setActiveExperienceCard(exp.id);
+                    }
+                    handleTouch(exp.id);
+                  }
+                }}
+                className="relative group space-y-3 lg:space-y-4 w-full cursor-pointer focus:outline-none active:outline-none select-none [-webkit-tap-highlight-color:transparent] outline-none ring-0 focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+                style={{ outline: "none", WebkitTapHighlightColor: "transparent" }}
               >
                 {/* Timeline yellow glowing indicator node */}
                 <div className={`absolute -left-[31px] sm:-left-[47px] lg:-left-[53px] top-1.5 lg:top-[53px] w-2.5 h-2.5 bg-[#ffba20] rounded-full transition-all duration-300 ease-out pointer-events-none border-none outline-none ring-0 ${
-                  isCurrentActive 
-                    ? "scale-125 shadow-[0_0_14px_rgba(255,186,32,0.85)]" 
-                    : "scale-100 group-hover:scale-125 shadow-none group-hover:shadow-[0_0_10px_rgba(255,186,32,0.6)]"
+                  isCurrentActive || touchedNode === exp.id
+                    ? "shadow-[0_0_14px_rgba(255,186,32,0.85)]" 
+                    : "shadow-none group-hover:shadow-[0_0_12px_rgba(255,186,32,0.7)] group-focus:shadow-[0_0_12px_rgba(255,186,32,0.7)] group-focus-visible:shadow-[0_0_12px_rgba(255,186,32,0.7)]"
                 }`} />
                 
                 {/* Period/Year - Large and clear above the card */}
@@ -356,11 +392,14 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
                 </div>
 
                 {/* Timeline entry card */}
-                <div className={`w-full transition-all duration-500 rounded-2xl p-5 sm:p-8 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 border-0 md:border lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 lg:hover:bg-transparent ${
-                  isCurrentActive
-                    ? "bg-[#130d05]/55 md:bg-[#130d05]/30 border-transparent md:border-[#ffba20]/45 shadow-[0_0_18px_rgba(255,186,32,0.12)] md:shadow-[0_4px_30px_rgba(0,0,0,0.4)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
-                    : "bg-[#130d05]/30 border-transparent md:border-[#514532]/15 hover:bg-[#130d05]/45 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] md:hover:border-[#ffba20]/30 md:hover:bg-[#130d05]/50"
-                }`}>
+                <div 
+                  className={`w-full transition-all duration-500 rounded-2xl p-5 sm:p-8 shadow-[0_4px_30px_rgba(0,0,0,0.4)] backdrop-blur-sm space-y-4 border-0 md:border lg:bg-transparent lg:border-none lg:p-0 lg:shadow-none lg:backdrop-blur-none lg:space-y-6 ${
+                    isCurrentActive
+                      ? "bg-[#130d05]/55 md:bg-[#130d05]/30 border-transparent md:border-[#ffba20]/45 shadow-[0_0_18px_rgba(255,186,32,0.12)] md:shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
+                      : "bg-[#130d05]/30 border-transparent md:border-[#514532]/15"
+                  }`}
+                  style={{ outline: "none", WebkitTapHighlightColor: "transparent" }}
+                >
                   {/* Header info */}
                   <div className="space-y-2 lg:space-y-3">
                     <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-[28px] xl:text-[32px] font-black text-[#f1e5d1] tracking-tight uppercase leading-snug lg:leading-tight break-words">
@@ -397,14 +436,27 @@ export default function StoryView({ onNavigate }: StoryViewProps) {
       {/* 5. "PUP FAO Dance Crew / Leadership" Section (Column 4) */}
       <section className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto py-6 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-12 lg:gap-16 items-center">
         {/* Pictures Block on Left - Ordered last on mobile, first on desktop */}
-        <div className="col-span-12 lg:col-span-5 relative group z-10 order-2 lg:order-1">
+        <div 
+          ref={danceCardRef}
+          onClick={() => {
+            if (window.innerWidth <= 768) {
+              setIsDanceCardActive(true);
+            }
+          }}
+          className="col-span-12 lg:col-span-5 relative group z-10 order-2 lg:order-1 cursor-pointer select-none [-webkit-tap-highlight-color:transparent] outline-none ring-0 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+          style={{ outline: "none", WebkitTapHighlightColor: "transparent" }}
+        >
           <div className="relative rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden border border-[#514532]/25 aspect-[4/5] max-w-[270px] xs:max-w-[310px] sm:max-w-md mx-auto bg-[#130d05] shadow-2xl">
             <div className="absolute inset-0 bg-[#ffdca1]/5 mix-blend-overlay pointer-events-none z-10 rounded-[1.5rem] lg:rounded-[2rem]" />
             <img
               src={PROFILE.danceImage}
               alt="PUP FAO Dance Crew"
               referrerPolicy="no-referrer"
-              className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 transition-all duration-750 ease-out rounded-[1.5rem] lg:rounded-[2rem] pointer-events-none"
+              className={`w-full h-full object-cover transition-all duration-750 ease-out rounded-[1.5rem] lg:rounded-[2rem] pointer-events-none ${
+                isDanceCardActive 
+                  ? "grayscale-0 contrast-100" 
+                  : "grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100"
+              }`}
             />
             {/* Absolute overlay elements mimicking screenshots */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0a05]/95 via-[#0e0a05]/30 to-transparent pointer-events-none z-10" />

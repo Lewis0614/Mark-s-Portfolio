@@ -31,9 +31,9 @@ export default function Footer({ onNavigate }: FooterProps) {
         </div>
 
         {/* Localized Footer Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 pt-4">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 pt-4 footer-grid">
           {/* Logo Brand / Bio block */}
-          <div className="col-span-2 md:col-span-5 space-y-4">
+          <div className="col-span-2 md:col-span-5 space-y-4 footer-col-about">
             <h3 className="font-display font-black uppercase tracking-[0.1em] text-2xl text-[#ede1d0]">
               Jhay Mark A.
             </h3>
@@ -50,7 +50,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           {/* Nav Categories */}
-          <div className="col-span-1 md:col-span-2 space-y-4">
+          <div className="col-span-1 md:col-span-2 space-y-4 footer-col-nav">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffba20] font-bold">
               Navigation
             </h4>
@@ -69,7 +69,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           {/* Domains / Capabilities */}
-          <div className="col-span-1 md:col-span-2 space-y-4">
+          <div className="col-span-1 md:col-span-2 space-y-4 footer-col-services">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffba20] font-bold">
               Key Services
             </h4>
@@ -83,39 +83,48 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           {/* Social/Contact Info */}
-          <div className="col-span-2 md:col-span-3 space-y-4 md:text-right">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffba20] font-bold md:text-right">
+          <div className="col-span-2 md:col-span-3 space-y-4 footer-col-contact">
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffba20] font-bold">
               Get in Touch
             </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-[#d5c4ab]/70 font-sans">
-              <li>
+            <ul className="space-y-4 text-xs sm:text-sm text-[#d5c4ab]/70 font-sans">
+              <li className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-[#1c160c] border border-[#ffba20]/20 flex items-center justify-center shadow-[0_0_12px_rgba(255,186,32,0.05)]">
+                  <span className="material-symbols-outlined text-[#ffba20] text-lg sm:text-xl">mail</span>
+                </div>
                 <a
                   href={`mailto:${PROFILE.email}`}
-                  className="hover:text-white transition-colors font-medium hover:underline text-[#ffdca1]"
+                  className="hover:text-white transition-colors font-medium hover:underline text-[#ffdca1] text-[13px] sm:text-sm"
                 >
                   {PROFILE.email}
                 </a>
               </li>
-              <li>
+              <li className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-[#1c160c] border border-[#ffba20]/20 flex items-center justify-center shadow-[0_0_12px_rgba(255,186,32,0.05)] font-display font-black text-[#ffba20] text-sm">
+                  in
+                </div>
                 <a
                   href={PROFILE.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white transition-colors hover:underline"
+                  className="hover:text-white transition-colors hover:underline text-[13px] sm:text-sm flex items-center gap-1"
                 >
-                  LinkedIn Outline
+                  LinkedIn Outline <span className="text-[#ffba20]/80">↗</span>
                 </a>
               </li>
-              <li>
+              <li className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-[#1c160c] border border-[#ffba20]/20 flex items-center justify-center shadow-[0_0_12px_rgba(255,186,32,0.05)]">
+                  <span className="material-symbols-outlined text-[#ffba20] text-lg sm:text-xl">description</span>
+                </div>
                 <a
                   href="/Jhay_Mark_Ortiz_Luis_Resume.pdf"
                   download="Jhay_Mark_Ortiz_Luis_Resume.pdf"
                   target="_blank"
                   rel="noreferrer"
                   onClick={downloadResume}
-                  className="hover:text-white transition-colors hover:underline text-[#d5c4ab]/70 text-left cursor-pointer"
+                  className="hover:text-white transition-colors hover:underline text-[#d5c4ab]/70 text-left cursor-pointer text-[13px] sm:text-sm flex items-center gap-1"
                 >
-                  Download PDF Resume
+                  Download PDF Resume <span className="text-[#ffba20]/80">↗</span>
                 </a>
               </li>
             </ul>
@@ -123,7 +132,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         </div>
 
         {/* Bottom copyright details */}
-        <div className="pt-6 sm:pt-12 mt-6 sm:mt-12 border-t border-[#514532]/10 flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+        <div className="pt-6 sm:pt-12 mt-6 sm:mt-12 border-t border-[#514532]/10 flex flex-col sm:flex-row items-center justify-between gap-4 w-full footer-bottom-row">
           <div className="text-[10px] font-mono text-[#d5c4ab]/40 text-center sm:text-left w-full sm:w-auto leading-relaxed">
             © 2026 {PROFILE.name}. Crafted with typographic precision.
           </div>

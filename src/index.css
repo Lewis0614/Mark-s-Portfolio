@@ -44,3 +44,323 @@
   -webkit-text-stroke: 1px rgba(237, 225, 208, 0.1);
   color: transparent;
 }
+
+/* Tablet responsiveness (768px - 1024px) for Footer */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 1.25rem 3rem !important; /* Larger horizontal gap, cohesive vertical gap */
+    padding-top: 0.5rem !important;
+  }
+
+  .footer-col-about {
+    grid-column: span 12 / span 12 !important;
+    max-width: 100% !important;
+    border-bottom: 1px solid rgba(81, 69, 50, 0.15) !important;
+    padding-bottom: 1.5rem !important; /* Elegant spacing above divider */
+    margin-bottom: 0.5rem !important; /* Elegant spacing below divider */
+  }
+
+  .footer-col-about h3 {
+    font-size: 1.75rem !important; /* Premium bold sizing as shown in mockup */
+    margin-bottom: 0.875rem !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .footer-col-about p {
+    max-width: 44rem !important; /* Fits perfectly across 3 rows as shown in mockup */
+    line-height: 1.7 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 1.25rem !important; /* Proper breathing room above location */
+    color: rgba(213, 196, 171, 0.65) !important;
+  }
+
+  .footer-col-about span.inline-flex {
+    font-size: 10px !important; /* Extremely clean and legible mono tracking */
+    letter-spacing: 0.15em !important;
+    color: rgba(213, 196, 171, 0.5) !important;
+  }
+
+  .footer-col-about .bg-green-500 {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .footer-col-nav {
+    grid-column: span 3 / span 3 !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .footer-col-services {
+    grid-column: span 4 / span 4 !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .footer-col-services ul {
+    font-size: 11px !important; /* Compounded typography optimization */
+  }
+
+  .footer-col-contact {
+    grid-column: span 5 / span 5 !important;
+    margin-top: 0 !important;
+    text-align: left !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .footer-col-contact h4 {
+    text-align: left !important;
+  }
+
+  /* Reduce spacing between footer column headings and their links */
+  .footer-col-nav > h4, 
+  .footer-col-services > h4, 
+  .footer-col-contact > h4 {
+    margin-bottom: 0.5rem !important; /* Tightened cohesive spacing */
+  }
+
+  .footer-col-nav > ul,
+  .footer-col-services > ul,
+  .footer-col-contact > ul {
+    margin-top: 0 !important;
+  }
+
+  /* Spacing optimization inside columns */
+  .footer-col-nav li,
+  .footer-col-services li,
+  .footer-col-contact li {
+    margin-top: 0 !important;
+  }
+
+  /* Vertically center contact items and maintain balanced gap */
+  .footer-col-contact li {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Reduce size of icon containers by ~10-15% and balance layout */
+  .footer-col-contact .flex-shrink-0 {
+    width: 31px !important;
+    height: 31px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Keep icon styling unchanged but scale to match new container */
+  .footer-col-contact .material-symbols-outlined {
+    font-size: 16px !important;
+  }
+
+  /* Align text icon */
+  .footer-col-contact .font-black {
+    font-size: 11px !important;
+  }
+
+  /* Make email address robustly wrap on narrow tablet screens if needed and prevent any clipping */
+  .footer-col-contact a {
+    font-size: 12.5px !important; /* Slightly reduced for clean proportional layout */
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+
+  .footer-bottom-row {
+    margin-top: 1.75rem !important; /* Reduced spacing to copyright */
+    padding-top: 1.25rem !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    text-align: left !important;
+  }
+
+  .footer-bottom-row > div:first-child {
+    text-align: left !important;
+    width: auto !important;
+  }
+
+  .footer-bottom-row > div:last-child {
+    text-align: right !important;
+    width: auto !important;
+  }
+}
+
+/* Desktop responsiveness and spacing optimization (1025px and above) */
+@media (min-width: 1025px) {
+  .footer-grid {
+    column-gap: 3.5rem !important; /* Elegant spacing between all columns */
+  }
+  
+  .footer-col-contact {
+    padding-left: 3.5rem !important; /* Moves Get in Touch column content to the right */
+  }
+
+  .footer-col-contact a {
+    white-space: nowrap !important; /* Keep email on a single line with absolute breathing room */
+  }
+}
+
+/* Mobile responsiveness and spacing optimization (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Tighten footer overall padding and margins */
+  footer {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    margin-top: 2.5rem !important;
+  }
+
+  /* Reduce spacing between primary sections of footer */
+  footer .space-y-16 {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse))) !important;
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse)) !important;
+    gap: 1.5rem !important;
+  }
+  
+  footer .space-y-16 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: 1.5rem !important;
+  }
+
+  /* Compact the cinematic CTA banner */
+  footer .py-6 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  /* Spacing and layout for columns */
+  .footer-grid {
+    gap: 1.25rem 1rem !important; /* Tighten grid gaps on mobile */
+    padding-top: 0.25rem !important;
+  }
+
+  /* Let about section be closer to divider */
+  .footer-col-about {
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* Navigation column tweaks */
+  .footer-col-nav {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Key Services column tweaks */
+  .footer-col-services {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Get In Touch column tweaks */
+  .footer-col-contact {
+    margin-top: 0.25rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Spacing between headings and items */
+  .footer-col-nav > h4,
+  .footer-col-services > h4,
+  .footer-col-contact > h4 {
+    margin-bottom: 0.375rem !important; /* Slightly tighter heading bottom margin */
+  }
+
+  /* Reduce spacing between navigation items on mobile */
+  .footer-col-nav ul {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: 0 !important;
+  }
+  .footer-col-nav li {
+    margin-top: 0 !important;
+    margin-bottom: 0.125rem !important;
+  }
+  .footer-col-nav li button {
+    font-size: 10px !important; /* Compact links */
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    display: inline-block !important;
+    width: 100% !important;
+  }
+
+  /* Reduce spacing between key services items on mobile */
+  .footer-col-services ul {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: 0 !important;
+  }
+  .footer-col-services li {
+    margin-top: 0 !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 10px !important; /* Slightly more compact font on mobile */
+  }
+
+  /* Get In Touch Items spacing and sizing */
+  .footer-col-contact ul {
+    --tw-space-y-reverse: 0 !important;
+    margin-top: 0 !important;
+    gap: 0.5rem !important; /* Much tighter gaps between items */
+  }
+  
+  .footer-col-contact li {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important; /* Tight and elegant touch spacing */
+  }
+
+  /* Scale down the icon container size by approx 15-20% */
+  .footer-col-contact .flex-shrink-0 {
+    width: 29px !important;
+    height: 29px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Scale icons inside the smaller containers */
+  .footer-col-contact .material-symbols-outlined {
+    font-size: 14px !important;
+  }
+
+  /* Scale standard text icon 'in' */
+  .footer-col-contact .font-black {
+    font-size: 10px !important;
+  }
+
+  /* Ensure the email is perfectly optimized for all mobile screens */
+  .footer-col-contact a {
+    font-size: 11.5px !important; /* Perfectly fits mobile screens without wrapping unnecessarily */
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    white-space: nowrap !important; /* Try to keep email on a single line with absolute breathing room */
+  }
+
+  /* Extra narrow screens check */
+  @media (max-width: 350px) {
+    .footer-col-contact a {
+      font-size: 10px !important;
+      white-space: normal !important; /* Allow wraps on extremely tiny 320px devices */
+    }
+  }
+
+  /* Copyright bottom row tweaks */
+  .footer-bottom-row {
+    margin-top: 1rem !important; /* Tighter spacing */
+    padding-top: 0.75rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.25rem !important; /* Closer copyright elements */
+  }
+
+  .footer-bottom-row > div:first-child {
+    text-align: center !important;
+  }
+
+  .footer-bottom-row > div:last-child {
+    text-align: center !important;
+  }
+}
+
+
