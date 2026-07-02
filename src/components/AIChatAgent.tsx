@@ -294,11 +294,21 @@ I look forward to connecting with you.
     setIsLoading(true);
 
     try {
-      // Map history for API
-      const history = messages.slice(1).map((m) => ({
-        role: m.role,
-        text: m.text,
-      }));
+      // Map history for API, filtering out any branded fallback error messages to preserve clean context
+      const history = messages.slice(1)
+        .filter((m) => {
+          const text = m.text;
+          return !(
+            text.includes("COMMUNICATION CHANNEL TEMPORARILY UNAVAILABLE") ||
+            text.includes("TEMPORARY CONNECTION INTERRUPTION") ||
+            text.includes("KNOWLEDGE SYNCHRONIZATION IN PROGRESS") ||
+            text.includes("[COMMS_OFFLINE]")
+          );
+        })
+        .map((m) => ({
+          role: m.role,
+          text: m.text,
+        }));
 
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -355,11 +365,20 @@ I look forward to connecting with you.
         setUsedPrompts((prev) => prev + 1);
       }
     } catch (e: any) {
+      // Log the complete technical error strictly in the browser developer console (never to the visitor UI)
+      console.error("Digital Twin Connection Error Details:", e);
+
       setMessages((prev) => [
         ...prev,
         {
           role: "model",
-          text: `[COMMS_OFFLINE]: ${e.message || "Failed to contact proxy server. Verify raw secrets configure process."}`,
+          text: `### COMMUNICATION CHANNEL TEMPORARILY UNAVAILABLE
+
+The Digital Twin is currently experiencing a temporary interruption while synchronizing knowledge services.
+
+Please wait a few moments and try again.
+
+Your conversation history has been preserved.`,
         },
       ]);
     } finally {
@@ -388,7 +407,7 @@ I look forward to connecting with you.
               AI Conversation Specialist
             </h3>
             <p className="font-mono text-[9px] sm:text-[10px] text-[#d5c4ab]/50 uppercase mt-1 break-words leading-relaxed">
-              Gemini model-grounded digital twin proxy
+              KNOWLEDGE-GROUNDED DIGITAL TWIN PROXY
             </p>
           </div>
         </div>

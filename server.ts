@@ -336,48 +336,92 @@ The proposed system reduces manual paperwork, improves document retrieval effici
       content: message,
     });
 
-    const openRouterKey = process.env.OPENROUTER_API_KEY;
-    if (!openRouterKey) {
-      throw new Error("OPENROUTER_API_KEY is not configured.");
-    }
-    const siteUrl = process.env.APP_URL || "https://ais-dev-cujfylnwqfsqb5kliur3ea-945108707878.asia-east1.run.app";
-    const siteName = "Jhay Mark Portfolio Digital Twin";
+    let replyText = "";
+    let usingFallback = false;
 
-    console.log("Calling OpenRouter API with model: openai/gpt-oss-120b:free");
-    const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openRouterKey}`,
-        "HTTP-Referer": siteUrl,
-        "X-Title": siteName,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-oss-120b:free",
-        messages: messages,
-        temperature: 0.7,
-      }),
-    });
+    try {
+      const openRouterKey = process.env.OPENROUTER_API_KEY;
+      if (!openRouterKey) {
+        throw new Error("OPENROUTER_API_KEY is not configured.");
+      }
+      const siteUrl = process.env.APP_URL || "https://ais-dev-cujfylnwqfsqb5kliur3ea-945108707878.asia-east1.run.app";
+      const siteName = "Jhay Mark Portfolio Digital Twin";
 
-    if (!openRouterResponse.ok) {
-      const errorText = await openRouterResponse.text();
-      throw new Error(`OpenRouter API error (${openRouterResponse.status}): ${errorText}`);
-    }
+      console.log("Calling OpenRouter API with model: openai/gpt-oss-120b:free");
+      const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${openRouterKey}`,
+          "HTTP-Referer": siteUrl,
+          "X-Title": siteName,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-oss-120b:free",
+          messages: messages,
+          temperature: 0.7,
+        }),
+      });
 
-    const data: any = await openRouterResponse.json();
-    console.log("OpenRouter API Raw Response:", JSON.stringify(data, null, 2));
+      if (!openRouterResponse.ok) {
+        const errorText = await openRouterResponse.text();
+        throw new Error(`OpenRouter API error (${openRouterResponse.status}): ${errorText}`);
+      }
 
-    if (data.error) {
-      const errMsg = typeof data.error === "object" 
-        ? (data.error.message || JSON.stringify(data.error)) 
-        : data.error;
-      throw new Error(`OpenRouter Error: ${errMsg}`);
-    }
+      const data: any = await openRouterResponse.json();
+      console.log("OpenRouter API Raw Response:", JSON.stringify(data, null, 2));
 
-    let replyText = data.choices?.[0]?.message?.content;
+      if (data.error) {
+        const errMsg = typeof data.error === "object" 
+          ? (data.error.message || JSON.stringify(data.error)) 
+          : data.error;
+        throw new Error(`OpenRouter Error: ${errMsg}`);
+      }
 
-    if (!replyText) {
-      throw new Error("No response text returned from OpenRouter API. Please check your model name or API Key.");
+      replyText = data.choices?.[0]?.message?.content || "";
+      if (!replyText) {
+        throw new Error("No response text returned from OpenRouter API.");
+      }
+    } catch (orError: any) {
+      console.warn("OpenRouter failed, attempting fallback to Gemini:", orError.message || orError);
+      
+      try {
+        const client = getGeminiClient();
+        
+        // Map history to Google GenAI Content format
+        const geminiContents: any[] = [];
+        if (history && history.length > 0) {
+          history.forEach((h: any) => {
+            geminiContents.push({
+              role: h.role === "assistant" || h.role === "model" ? "model" : "user",
+              parts: [{ text: h.text }]
+            });
+          });
+        }
+        geminiContents.push({
+          role: "user",
+          parts: [{ text: message }]
+        });
+
+        console.log("Calling Gemini API fallback with model: gemini-3.5-flash");
+        const geminiResponse = await client.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: geminiContents,
+          config: {
+            systemInstruction: SYSTEM_INSTRUCTION.trim(),
+            temperature: 0.7,
+          },
+        });
+
+        replyText = geminiResponse.text || "";
+        if (!replyText) {
+          throw new Error("Gemini fallback returned empty text.");
+        }
+        usingFallback = true;
+      } catch (geminiError: any) {
+        console.error("Gemini fallback also failed:", geminiError);
+        throw new Error(`Primary agent service offline (${orError.message}). Secondary agent service failed (${geminiError.message}).`);
+      }
     }
 
     // Clean up any undesired reference to downloading the full resume for code/demo links if the model generates it
