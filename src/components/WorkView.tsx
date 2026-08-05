@@ -324,11 +324,22 @@ export default function WorkView({ onNavigate }: WorkViewProps) {
           </h2>
           <div className="font-sans text-xs sm:text-sm md:text-base text-[#d5c4ab]/85 space-y-4 leading-relaxed">
             <p>
-              A spatial campus directory map plotting PUP landmarks using customized vector overlays, coordinate telemetry tags, and dynamic tooltip panels.
+              A precision-engineered campus directory web application mapping PUP landmarks through pixel-accurate architectural layouts, custom SVG overlays, responsive search, and interactive navigation panels.
             </p>
             <p>
-              Enables active navigation across landmark points, rendering accurate real-time architectural descriptions on selectors click events.
+              Enables seamless exploration of campus facilities with smooth animations, accessible UI patterns, and real-time location discovery across desktop and mobile devices.
             </p>
+          </div>
+          <div className="pt-2">
+            <a
+              href="https://pup-interactive-campus-kiosk.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffba20] text-[#181309] font-mono text-xs uppercase tracking-[0.15em] font-black rounded hover:bg-[#ffdca1] transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-[#ffba20]/15"
+            >
+              <span>Explore Live Map</span>
+              <span className="material-symbols-outlined text-sm font-black">open_in_new</span>
+            </a>
           </div>
         </div>
 

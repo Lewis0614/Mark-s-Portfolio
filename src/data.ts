@@ -90,9 +90,9 @@ export const PROJECTS: Project[] = [
     id: "proj-3",
     title: "Interactive PUP Vicinity Map",
     category: "UX Design & Interactive Mapping",
-    description: "An interactive campus map web app developed using HTML, CSS, and JavaScript. Features a responsive image map of PUP Manila Campus with hoverable landmarks that display dynamic pop-up information. Utilizes JavaScript functions for real-time interaction, enhancing user engagement and learning of campus sites.",
+    description: "A secure, type-safe interactive campus map built with React 18, Vite, and TypeScript. Styled with Tailwind CSS around PUP's guidelines, featuring fluid Framer Motion transitions, pixel-perfect coordinate mapping, and accessible search autocomplete.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBB9pkda-und5iZ7CMhNvhFJ97U9kTJU4kF1YlDX-uBwBLO0C3Lf8kAzAw3dOlXlBPlc64ONdAmX1TQXPMFgAo6F5R9_-nGtIgxBZtZkqXLDWoaSHwmv7KlMngJiKGKBTtO8Q9Goi11QGxfernhJtWsuf--NUPxL4VRseny7OBZxqqDKHkHUNu9WZKH_3G-Hval9qxpzh4QFK41cuFLj5sQonox6ArT5guVl4h8d4LYjqVSn6hURlYEZIuf9aDpiewxv0sabHwO7W9_",
-    tags: ["HTML", "CSS", "JavaScript", "Image Map", "Dynamic Popup"],
+    tags: ["React 18", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion"],
     icon: "map",
   },
 ];
